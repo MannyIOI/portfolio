@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" font-family="Helvetica Neue, Arial, sans-serif">
+  <defs>
+    <linearGradient id="t" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#f2efe8"/>
+      <stop offset="1" stop-color="#d7ff3e"/>
+    </linearGradient>
+    <radialGradient id="v" cx="0.2" cy="0.15" r="0.8">
+      <stop offset="0" stop-color="#6e4bff" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#6e4bff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="a" cx="0.9" cy="0.9" r="0.7">
+      <stop offset="0" stop-color="#d7ff3e" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#d7ff3e" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="#08080c"/>
+  <rect width="1200" height="630" fill="url(#v)"/>
+  <rect width="1200" height="630" fill="url(#a)"/>
+  <g fill="none" stroke="#f2efe8" stroke-opacity="0.07">
+    <path d="M0 90h1200M0 180h1200M0 270h1200M0 360h1200M0 450h1200M0 540h1200"/>
+    <path d="M90 0v630M180 0v630M270 0v630M360 0v630M450 0v630M540 0v630M630 0v630M720 0v630M810 0v630M900 0v630M990 0v630M1080 0v630"/>
+  </g>
+  <circle cx="86" cy="86" r="8" fill="#d7ff3e"/>
+  <text x="112" y="93" fill="#a8a49b" font-size="22" letter-spacing="4">SOFTWARE ENGINEER — SINGAPORE</text>
+  <text x="80" y="300" fill="url(#t)" font-size="150" font-weight="bold" letter-spacing="-6">AMANUEL</text>
+  <text x="80" y="430" fill="none" stroke="#f2efe8" stroke-width="2" font-size="150" font-weight="bold" letter-spacing="-6">TADESSE</text>
+  <text x="80" y="520" fill="#c9c5bd" font-size="30">Node.js · Express · TypeScript · React · Data platforms at scale</text>
+  <text x="80" y="576" fill="#d7ff3e" font-size="25" letter-spacing="2">~20M influencers tracked  ·  5s → 0.8s  ·  Lighthouse 99</text>
+</svg>

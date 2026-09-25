@@ -1,0 +1,10 @@
+{
+  "name": "Amanuel Tadesse — Software Engineer",
+  "short_name": "Amanuel T.",
+  "description": "Portfolio of Amanuel Tadesse, software engineer.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#08080c",
+  "theme_color": "#08080c",
+  "icons": [{ "src": "assets/img/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

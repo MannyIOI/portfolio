@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Amanuel Tadesse — Software Engineer</title>
+<meta name="description" content="Amanuel Tadesse is a software engineer building backend and data platform systems at scale — Node.js, Express, TypeScript and React. ~20M influencers tracked, sub-second APIs, Lighthouse 99s." />
+<meta name="author" content="Amanuel Tadesse" />
+<meta name="theme-color" content="#08080c" />
+<link rel="canonical" href="https://amanueltadesse.dev/" />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Amanuel Tadesse — Software Engineer" />
+<meta property="og:description" content="Backend & data platform engineer. Node.js · Express · TypeScript · React. Systems that track ~20M influencers and answer in milliseconds." />
+<meta property="og:url" content="https://amanueltadesse.dev/" />
+<meta property="og:image" content="https://amanueltadesse.dev/assets/img/og.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:type" content="image/jpeg" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@AmanuelTef" />
+<meta name="twitter:title" content="Amanuel Tadesse — Software Engineer" />
+<meta name="twitter:description" content="Backend & data platform engineer. Node.js · Express · TypeScript · React." />
+<meta name="twitter:image" content="https://amanueltadesse.dev/assets/img/og.jpg" />
+
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="assets/img/favicon.svg" />
+<link rel="manifest" href="site.webmanifest" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,600;12..96,75..100,800&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;700&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,600;12..96,75..100,800&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;700&display=swap" media="print" onload="this.media='all'" />
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,600;12..96,75..100,800&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;700&display=swap" /></noscript>
+<link rel="stylesheet" href="assets/css/styles.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Amanuel Tadesse",
+  "jobTitle": "Software Engineer",
+  "email": "mailto:aman.teferi.80@gmail.com",
+  "url": "https://amanueltadesse.dev/",
+  "sameAs": ["https://github.com/MannyIOI", "https://www.linkedin.com/in/amanuel-tadesse", "https://twitter.com/AmanuelTef"],
+  "alumniOf": { "@type": "CollegeOrUniversity", "name": "Addis Ababa University" },
+  "knowsAbout": ["Node.js", "Express.js", "TypeScript", "JavaScript", "React", "Angular", "React Native", "Django", "Data Platforms"],
+  "worksFor": { "@type": "Organization", "name": "Bazaarvoice" }
+}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- ░░ PRELOADER ░░ -->
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader__inner">
+    <div class="loader__word"><span>AMANUEL</span></div>
+    <div class="loader__meta">
+      <span class="loader__label">LOADING</span>
+      <span class="loader__count" id="loaderCount">00</span>
+    </div>
+    <div class="loader__bar"><i id="loaderBar"></i></div>
+  </div>
+</div>
+
+<!-- ░░ CURSOR ░░ -->
+<div class="cursor" id="cursor" aria-hidden="true">
+  <div class="cursor__dot"></div>
+  <div class="cursor__ring"><span class="cursor__label"></span></div>
+</div>
+
+<div class="grain" aria-hidden="true"></div>
+<div class="scroll-progress" aria-hidden="true"><i id="scrollProgress"></i></div>
+
+<!-- ░░ NAV ░░ -->
+<header class="nav" id="nav">
+  <a class="nav__logo" href="#home" data-cursor="hover">
+    <span class="nav__logo-mark">AT</span>
+    <span class="nav__logo-pulse"></span>
+  </a>
+  <nav class="nav__links" aria-label="Primary">
+    <a href="#about" class="nav__link" data-cursor="hover"><span>About</span><span>About</span></a>
+    <a href="#stack" class="nav__link" data-cursor="hover"><span>Stack</span><span>Stack</span></a>
+    <a href="#work" class="nav__link" data-cursor="hover"><span>Work</span><span>Work</span></a>
+    <a href="#contact" class="nav__link" data-cursor="hover"><span>Contact</span><span>Contact</span></a>
+  </nav>
+  <div class="nav__right">
+    <span class="nav__clock" id="navClock" title="Local time in Singapore">--:--:-- SGT</span>
+    <a href="#contact" class="btn btn--sm" data-magnetic data-cursor="hover"><span>Let's talk</span></a>
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><i></i><i></i></button>
+  </div>
+</header>
+
+<!-- ░░ MOBILE MENU ░░ -->
+<div class="menu" id="menu" aria-hidden="true">
+  <div class="menu__list">
+    <a href="#about" class="menu__item"><em>01</em>About</a>
+    <a href="#stack" class="menu__item"><em>02</em>Stack</a>
+    <a href="#work" class="menu__item"><em>03</em>Work</a>
+    <a href="#contact" class="menu__item"><em>04</em>Contact</a>
+  </div>
+  <div class="menu__foot">
+    <a href="https://github.com/MannyIOI" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://www.linkedin.com/in/amanuel-tadesse" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="mailto:aman.teferi.80@gmail.com">Email</a>
+  </div>
+</div>
+
+<main id="main">
+
+<!-- ░░ HERO ░░ -->
+<section class="hero" id="home">
+  <canvas class="hero__canvas" id="heroCanvas" aria-hidden="true"></canvas>
+  <div class="hero__glow" aria-hidden="true"></div>
+  <div class="hero__grid" aria-hidden="true"></div>
+
+  <div class="hero__inner">
+    <p class="hero__eyebrow" data-reveal>
+      <span class="dot"></span> Software Engineer — Singapore <span class="eyebrow-extra"><span class="sep">/</span> Building since 2020</span>
+    </p>
+
+    <h1 class="hero__title">
+      <span class="line" data-split>Amanuel</span>
+      <span class="line line--out" data-split>Tadesse</span>
+    </h1>
+
+    <div class="hero__row">
+      <p class="hero__lead" data-reveal>
+        I build the <b>backend and data platform systems</b> other products stand on —
+        pipelines tracking <em>~20 million</em> creators, APIs that answer in
+        <em>milliseconds</em>, and interfaces that score <em>99</em> across the board.
+      </p>
+      <div class="hero__cta" data-reveal>
+        <a href="#work" class="btn btn--primary" data-magnetic data-cursor="view"><span>See the work</span><i class="btn__arrow">→</i></a>
+        <a href="#contact" class="btn btn--ghost" data-magnetic data-cursor="hover"><span>Get in touch</span></a>
+      </div>
+    </div>
+
+    <ul class="hero__stats" data-reveal>
+      <li><strong data-count="20" data-suffix="M+">0</strong><span>Influencers tracked</span></li>
+      <li><strong data-count="0.8" data-prefix="~" data-suffix="s" data-decimals="1">0</strong><span>Test creation, from 5s</span></li>
+      <li><strong data-count="99" data-suffix="/100">0</strong><span>Lighthouse, every metric</span></li>
+      <li><strong data-count="5" data-suffix=" yrs">0</strong><span>Shipping in production</span></li>
+    </ul>
+  </div>
+
+  <a class="hero__scroll" href="#about" aria-label="Scroll to about">
+    <span>SCROLL</span>
+    <i></i>
+  </a>
+</section>
+
+<!-- ░░ MARQUEE ░░ -->
+<div class="marquee" data-marquee aria-hidden="true">
+  <div class="marquee__track">
+    <span>Node.js</span><b>✦</b><span>Express</span><b>✦</b><span>TypeScript</span><b>✦</b><span>React</span><b>✦</b><span>Data Platforms</span><b>✦</b><span>Angular</span><b>✦</b><span>React Native</span><b>✦</b><span>Django</span><b>✦</b>
+    <span>Node.js</span><b>✦</b><span>Express</span><b>✦</b><span>TypeScript</span><b>✦</b><span>React</span><b>✦</b><span>Data Platforms</span><b>✦</b><span>Angular</span><b>✦</b><span>React Native</span><b>✦</b><span>Django</span><b>✦</b>
+  </div>
+</div>
+
+<!-- ░░ ABOUT ░░ -->
+<section class="section about" id="about">
+  <div class="section__head">
+    <span class="tag" data-reveal><i>01</i> About</span>
+  </div>
+
+  <div class="about__grid">
+    <div class="about__statement">
+      <p class="statement" data-split-words>
+        I like the unglamorous half of the stack — the ingestion job that can't drop a record,
+        the query that shaved itself in half, the endpoint that went from five seconds to under one.
+        Systems people never think about because they simply never break.
+      </p>
+      <p class="about__body" data-reveal>
+        I'm a software engineer with a BSc in Software Engineering from
+        <b>Addis Ababa University</b>. I've spent my career between data platforms at scale
+        and full-stack product work: Node.js and Express at the core, TypeScript everywhere,
+        React on the front. Right now I'm on the CNC Cast Platform team at
+        <b>Bazaarvoice</b> in Singapore, and I lead the Computer-Simulated Case project for
+        USMLE Step 3 at <b>Synapse</b> on the side.
+      </p>
+    </div>
+
+    <aside class="about__cards">
+      <article class="card card--edu" data-tilt data-reveal>
+        <span class="card__kicker">Education</span>
+        <h3>BSc, Software Engineering</h3>
+        <p>Addis Ababa University</p>
+        <span class="card__years">2016 — 2021</span>
+        <div class="card__shine" aria-hidden="true"></div>
+      </article>
+      <article class="card card--now" data-tilt data-reveal>
+        <span class="card__kicker"><span class="live"></span> Currently</span>
+        <h3>CNC Cast Platform</h3>
+        <p>Bazaarvoice · Singapore</p>
+        <span class="card__years">2021 — Present</span>
+        <div class="card__shine" aria-hidden="true"></div>
+      </article>
+      <article class="card card--side" data-tilt data-reveal>
+        <span class="card__kicker">Leading</span>
+        <h3>USMLE Step 3 CCS</h3>
+        <p>Synapse · Simulated case engine</p>
+        <span class="card__years">Ongoing</span>
+        <div class="card__shine" aria-hidden="true"></div>
+      </article>
+    </aside>
+  </div>
+</section>
+
+<!-- ░░ STACK ░░ -->
+<section class="section stack" id="stack">
+  <div class="section__head">
+    <span class="tag" data-reveal><i>02</i> Stack</span>
+    <h2 class="section__title" data-split>The toolkit</h2>
+  </div>
+
+  <div class="stack__core">
+    <span class="stack__label" data-reveal>Core — every day, in production</span>
+    <ul class="stack__core-list">
+      <li data-stack-core data-cursor="hover"><span class="idx">01</span><h3>Node.js</h3><p>Services, workers, ingestion at volume.</p></li>
+      <li data-stack-core data-cursor="hover"><span class="idx">02</span><h3>Express.js</h3><p>APIs I've kept fast under real traffic.</p></li>
+      <li data-stack-core data-cursor="hover"><span class="idx">03</span><h3>TypeScript</h3><p>The whole JS ecosystem, typed end to end.</p></li>
+      <li data-stack-core data-cursor="hover"><span class="idx">04</span><h3>React</h3><p>Product surfaces that feel instant.</p></li>
+    </ul>
+  </div>
+
+  <div class="stack__secondary">
+    <span class="stack__label" data-reveal>Also shipped</span>
+    <div class="stack__chips">
+      <span class="chip" data-reveal data-magnetic>Angular</span>
+      <span class="chip" data-reveal data-magnetic>React Native</span>
+      <span class="chip" data-reveal data-magnetic>Django</span>
+      <span class="chip chip--muted" data-reveal data-magnetic>PostgreSQL</span>
+      <span class="chip chip--muted" data-reveal data-magnetic>REST &amp; GraphQL</span>
+      <span class="chip chip--muted" data-reveal data-magnetic>Data pipelines</span>
+      <span class="chip chip--muted" data-reveal data-magnetic>Performance &amp; SEO</span>
+    </div>
+  </div>
+</section>
+
+<!-- ░░ IMPACT ░░ -->
+<section class="section impact" id="impact">
+  <div class="impact__inner">
+    <div class="impact__item" data-reveal>
+      <strong><span data-count="60" data-prefix="−" data-suffix="%">0</span></strong>
+      <p>daily payment processing time at DriveHive, by restructuring the backend</p>
+    </div>
+    <div class="impact__item" data-reveal>
+      <strong><span data-count="50" data-prefix="−" data-suffix="%">0</span></strong>
+      <p>on a key database query at Betesemay</p>
+    </div>
+    <div class="impact__item" data-reveal>
+      <strong><span data-count="1000" data-prefix="~" data-suffix="">0</span></strong>
+      <p>concurrent users architected for at Shilengae</p>
+    </div>
+    <div class="impact__item" data-reveal>
+      <strong><span data-count="4" data-prefix="" data-suffix="">0</span></strong>
+      <p>social platforms ingested: YouTube, TikTok, Facebook, Instagram</p>
+    </div>
+  </div>
+</section>
+
+<!-- ░░ WORK ░░ -->
+<section class="section work" id="work">
+  <div class="section__head">
+    <span class="tag" data-reveal><i>03</i> Experience</span>
+    <h2 class="section__title" data-split>Where I've built</h2>
+  </div>
+
+  <div class="work__list">
+
+    <article class="job" data-job>
+      <div class="job__bar" aria-hidden="true"></div>
+      <header class="job__head">
+        <span class="job__idx">01</span>
+        <div class="job__title">
+          <h3>Affable <span class="arrow">→</span> Bazaarvoice</h3>
+          <p class="job__role">Software Engineer · Singapore</p>
+        </div>
+        <span class="job__years">2021 — Present</span>
+      </header>
+      <div class="job__body">
+        <p class="job__intro">
+          Data Platform team at Affable, a UGC and influencer marketing platform connecting
+          brands with nano-influencers (1K–100K followers) and showing them which creators
+          actually move the needle. Affable was acquired by Bazaarvoice; I'm now on the
+          CNC Cast Platform team.
+        </p>
+        <ul class="job__points">
+          <li>Built backend and data platform systems tracking <b>~20 million influencers</b> across YouTube, TikTok, Facebook and Instagram, ingesting millions of data points.</li>
+          <li>Led the <b>TikTok API integration</b> into the platform end to end.</li>
+          <li>Carried the platform through the acquisition into the Bazaarvoice stack.</li>
+        </ul>
+        <div class="job__tags"><span>Node.js</span><span>Express</span><span>TypeScript</span><span>Data pipelines</span><span>Social APIs</span></div>
+      </div>
+    </article>
+
+    <article class="job" data-job>
+      <div class="job__bar" aria-hidden="true"></div>
+      <header class="job__head">
+        <span class="job__idx">02</span>
+        <div class="job__title">
+          <h3>Synapse</h3>
+          <p class="job__role">Full-Stack Developer · US · Part-time</p>
+        </div>
+        <span class="job__years">Ongoing</span>
+      </header>
+      <div class="job__body">
+        <p class="job__intro">
+          A platform where doctors get practice tests for their USMLE exams.
+        </p>
+        <ul class="job__points">
+          <li>Cut test creation load time from <b>4–5 seconds to ~0.8 seconds</b> on average.</li>
+          <li>Raised Lighthouse scores from the 70s–80s to <b>99 across every metric</b> through SEO, generative engine optimization (GEO) and performance work on the landing page and app.</li>
+          <li>Currently <b>leading the Computer-Simulated Case (CCS) project</b> for USMLE Step 3, giving students a way to practice the simulated cases on their exam.</li>
+        </ul>
+        <div class="job__tags"><span>Next.js</span><span>TypeScript</span><span>Node.js</span><span>Performance</span><span>SEO / GEO</span></div>
+      </div>
+    </article>
+
+    <article class="job" data-job>
+      <div class="job__bar" aria-hidden="true"></div>
+      <header class="job__head">
+        <span class="job__idx">03</span>
+        <div class="job__title">
+          <h3>DriveHive</h3>
+          <p class="job__role">Full-Stack Developer · US · Part-time</p>
+        </div>
+        <span class="job__years">2024 — 2025</span>
+      </header>
+      <div class="job__body">
+        <p class="job__intro">
+          A platform matching car leasing with rideshare drivers on a pay-as-you-go model.
+        </p>
+        <ul class="job__points">
+          <li>Cut daily payment processing time for driven miles by <b>~60%</b> by restructuring an inefficient backend.</li>
+          <li>Became <b>one of only two developers</b> maintaining the entire platform after the US-based team was let go.</li>
+          <li>Redesigned the company website.</li>
+        </ul>
+        <div class="job__tags"><span>Node.js</span><span>Express</span><span>React</span><span>Payments</span></div>
+      </div>
+    </article>
+
+    <article class="job" data-job>
+      <div class="job__bar" aria-hidden="true"></div>
+      <header class="job__head">
+        <span class="job__idx">04</span>
+        <div class="job__title">
+          <h3>Shilengae</h3>
+          <p class="job__role">Full-Stack Developer, Backend &amp; Mobile · Dubai</p>
+        </div>
+        <span class="job__years">~1.5 years</span>
+      </header>
+      <div class="job__body">
+        <p class="job__intro">An e-commerce platform serving the Gulf market.</p>
+        <ul class="job__points">
+          <li>Rebuilt the <b>Django server</b> and the <b>React Native</b> mobile app essentially from scratch.</li>
+          <li>Architected the system to support <b>~1,000 concurrent users</b>.</li>
+        </ul>
+        <div class="job__tags"><span>Django</span><span>React Native</span><span>PostgreSQL</span><span>E-commerce</span></div>
+      </div>
+    </article>
+
+    <article class="job" data-job>
+      <div class="job__bar" aria-hidden="true"></div>
+      <header class="job__head">
+        <span class="job__idx">05</span>
+        <div class="job__title">
+          <h3>Betesemay</h3>
+          <p class="job__role">Junior Developer · Ethiopia</p>
+        </div>
+        <span class="job__years">~2020 · 1 year</span>
+      </header>
+      <div class="job__body">
+        <p class="job__intro">
+          Worked on Moogter, a debating platform built for the Ethiopian market ahead of the
+          national election.
+        </p>
+        <ul class="job__points">
+          <li>Django backend, Angular frontend, shipped under an election deadline.</li>
+          <li>Cut a key database query time <b>in half</b>.</li>
+        </ul>
+        <div class="job__tags"><span>Django</span><span>Angular</span><span>PostgreSQL</span></div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ░░ CONTACT ░░ -->
+<section class="section contact" id="contact">
+  <div class="contact__glow" aria-hidden="true"></div>
+  <div class="section__head">
+    <span class="tag" data-reveal><i>04</i> Contact</span>
+  </div>
+
+  <h2 class="contact__big" data-split>Let's build<br />something</h2>
+
+  <div class="contact__grid">
+    <div class="contact__left">
+      <p class="contact__lead" data-reveal>
+        Open to backend and full-stack work, data platform problems, and anything that needs
+        to get dramatically faster. I read everything that lands here.
+      </p>
+      <a class="contact__mail" href="mailto:aman.teferi.80@gmail.com" data-cursor="hover" data-reveal>
+        <span>aman.teferi.80@gmail.com</span>
+      </a>
+      <ul class="contact__socials" data-reveal>
+        <li><a href="https://github.com/MannyIOI" target="_blank" rel="noopener" data-cursor="hover" data-magnetic><span>GitHub</span><i>↗</i></a></li>
+        <li><a href="https://www.linkedin.com/in/amanuel-tadesse" target="_blank" rel="noopener" data-cursor="hover" data-magnetic><span>LinkedIn</span><i>↗</i></a></li>
+        <li><a href="https://twitter.com/AmanuelTef" target="_blank" rel="noopener" data-cursor="hover" data-magnetic><span>Twitter</span><i>↗</i></a></li>
+      </ul>
+    </div>
+
+    <form class="form" id="contactForm" novalidate data-reveal>
+      <div class="field">
+        <input type="text" id="name" name="name" required autocomplete="name" placeholder=" " />
+        <label for="name">Your name</label>
+        <span class="field__error" data-error-for="name"></span>
+      </div>
+      <div class="field">
+        <input type="email" id="email" name="email" required autocomplete="email" placeholder=" " />
+        <label for="email">Email</label>
+        <span class="field__error" data-error-for="email"></span>
+      </div>
+      <div class="field">
+        <textarea id="message" name="message" rows="4" required placeholder=" "></textarea>
+        <label for="message">What are you building?</label>
+        <span class="field__error" data-error-for="message"></span>
+      </div>
+      <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+      <button type="submit" class="btn btn--primary btn--full" data-magnetic data-cursor="hover">
+        <span class="btn__text">Send it</span><i class="btn__arrow">→</i>
+      </button>
+      <p class="form__status" id="formStatus" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="footer__top">
+    <span class="footer__name">AMANUEL TADESSE</span>
+  </div>
+  <div class="footer__bar">
+    <span>© <span id="year">2026</span> — Built from scratch. No frameworks.</span>
+    <span class="footer__time"><i class="live"></i> Singapore <b id="footClock">--:--</b></span>
+    <a href="#home" class="footer__top-link" data-cursor="hover" data-magnetic>Back to top ↑</a>
+  </div>
+</footer>
+
+<script src="assets/js/hero.js" defer></script>
+<script src="assets/js/app.js" defer></script>
+</body>
+</html>
