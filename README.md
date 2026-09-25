@@ -3,7 +3,7 @@
 A bold, motion-heavy personal site for a software engineer. Hand-written HTML, CSS and
 JavaScript: **no framework, no build step, no dependencies**. Open `index.html` and it runs.
 
-**Live:** https://mannyioi.github.io/portfolio/
+**Live:** https://mannyioi.github.io/portfolio/ · mirrored on [Vercel](https://portfolio-amanuels-projects-5fe1beae.vercel.app/)
 
 ---
 
@@ -97,7 +97,9 @@ request fails.
 **GitHub Pages** — `.github/workflows/deploy.yml` publishes `main` automatically.
 Enable it once under *Settings → Pages → Build and deployment → Source: GitHub Actions*.
 
-**Vercel / Netlify / Cloudflare Pages** — import the repo, no build command, output directory `.`.
+**Vercel** — already linked to this repo; every push to `main` ships to production. `vercel.json` carries the cache and security headers (no build step, output directory `.`).
+
+**Netlify / Cloudflare Pages** — import the repo, no build command, output directory `.`.
 
 Using a custom domain? Update the absolute URLs in `index.html` (`og:url`, `canonical`,
 `og:image`), `sitemap.xml` and `robots.txt`.
