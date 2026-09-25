@@ -1,4 +1,4 @@
-# Amanuel Tadesse — Portfolio
+# Amanuel Teferi — Portfolio
 
 A bold, motion-heavy personal site for a software engineer. Hand-written HTML, CSS and
 JavaScript: **no framework, no build step, no dependencies**. Open `index.html` and it runs.
@@ -21,11 +21,11 @@ JavaScript: **no framework, no build step, no dependencies**. Open `index.html` 
 - Word-by-word light-up on the about statement as you scroll through it
 - Scroll-velocity-reactive marquee, animated stat counters, hero parallax and letter-spacing drift
 - Magnetic buttons, 3D tilt cards with a cursor-tracking shine, custom blend-mode cursor with hover/"VIEW" states
-- Hide-on-scroll nav, top scroll-progress bar, live Singapore clock
+- Hide-on-scroll nav, top scroll-progress bar, live Addis Ababa clock
 
 **Content**
 - Hero, about + education/current cards, stack (core vs. secondary), impact metrics band,
-  five-role experience accordion, contact section with a working form, footer wordmark
+  five-role experience accordion, side-projects grid, contact section with a working form, footer wordmark
 
 **Engineering**
 - ~0 JS dependencies; two small deferred scripts
@@ -63,14 +63,14 @@ Everything personal lives in two places.
 var CONFIG = {
   FORM_ENDPOINT: '',                     // see below
   EMAIL: 'aman.teferi.80@gmail.com',
-  TIMEZONE: 'Asia/Singapore'
+  TIMEZONE: 'Africa/Addis_Ababa'
 };
 ```
 
 **2. `index.html`** — copy, links and meta tags.
 
 > **Set your LinkedIn URL.** The site currently ships
-> `https://www.linkedin.com/in/amanuel-tadesse` as a placeholder in three spots
+> `https://www.linkedin.com/in/mannyioi` as a placeholder in three spots
 > (JSON-LD, mobile menu, contact socials). Search and replace it with your real profile URL.
 
 Colours and type are CSS custom properties at the top of `assets/css/styles.css`:

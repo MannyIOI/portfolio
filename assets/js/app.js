@@ -13,7 +13,7 @@
   var CONFIG = {
     FORM_ENDPOINT: '',
     EMAIL: 'aman.teferi.80@gmail.com',
-    TIMEZONE: 'Asia/Singapore'
+    TIMEZONE: 'Africa/Addis_Ababa'
   };
 
   var $  = function (s, c) { return (c || document).querySelector(s); };
@@ -361,7 +361,7 @@
     function tick() {
       var now = new Date();
       try {
-        if (nav) nav.textContent = now.toLocaleTimeString('en-GB', { timeZone: CONFIG.TIMEZONE, hour12: false }) + ' SGT';
+        if (nav) nav.textContent = now.toLocaleTimeString('en-GB', { timeZone: CONFIG.TIMEZONE, hour12: false }) + ' EAT';
         if (foot) foot.textContent = now.toLocaleTimeString('en-GB', { timeZone: CONFIG.TIMEZONE, hour: '2-digit', minute: '2-digit', hour12: false });
       } catch (err) {
         if (nav) nav.textContent = now.toLocaleTimeString();
