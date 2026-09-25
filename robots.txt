@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://amanueltadesse.dev/sitemap.xml
+Sitemap: https://mannyioi.github.io/portfolio/sitemap.xml

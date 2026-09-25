@@ -3,7 +3,7 @@
 A bold, motion-heavy personal site for a software engineer. Hand-written HTML, CSS and
 JavaScript: **no framework, no build step, no dependencies**. Open `index.html` and it runs.
 
-**Live:** _add your URL once deployed_
+**Live:** https://mannyioi.github.io/portfolio/
 
 ---
 
