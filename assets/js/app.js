@@ -345,6 +345,7 @@
     function close() {
       panel.classList.remove('is-open');
       panel.setAttribute('aria-hidden', 'true');
+      panel.inert = true;
       burger.classList.remove('is-open');
       burger.setAttribute('aria-expanded', 'false');
       burger.setAttribute('aria-label', 'Open menu');
@@ -355,13 +356,17 @@
       if (!open) return close();
       panel.classList.add('is-open');
       panel.setAttribute('aria-hidden', 'false');
+      panel.inert = false;
       burger.classList.add('is-open');
       burger.setAttribute('aria-expanded', 'true');
       burger.setAttribute('aria-label', 'Close menu');
       document.body.classList.add('is-locked', 'menu-open');
     });
     $$('.menu__item, .menu__foot a', panel).forEach(function (a) { a.addEventListener('click', close); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && panel.classList.contains('is-open')) { close(); burger.focus(); }
+    });
+    panel.inert = true;  /* closed menu links stay out of the tab order */
   })();
 
   /* ══ 13. CLOCKS + YEAR ══════════════════════════════════ */

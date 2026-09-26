@@ -97,12 +97,12 @@
     <span class="nav__logo-pulse"></span>
   </a>
   <nav class="nav__links" aria-label="Primary">
-    <a href="#about" class="nav__link" data-cursor="hover"><span>About</span><span>About</span></a>
-    <a href="#stack" class="nav__link" data-cursor="hover"><span>Stack</span><span>Stack</span></a>
-    <a href="#work" class="nav__link" data-cursor="hover"><span>Work</span><span>Work</span></a>
-    <a href="#projects" class="nav__link" data-cursor="hover"><span>Projects</span><span>Projects</span></a>
-    <a href="play.html" class="nav__link nav__link--play" data-cursor="hover"><span>Play</span><span>Play</span></a>
-    <a href="#contact" class="nav__link" data-cursor="hover"><span>Contact</span><span>Contact</span></a>
+    <a href="#about" class="nav__link" data-cursor="hover"><span>About</span><span aria-hidden="true">About</span></a>
+    <a href="#stack" class="nav__link" data-cursor="hover"><span>Stack</span><span aria-hidden="true">Stack</span></a>
+    <a href="#work" class="nav__link" data-cursor="hover"><span>Work</span><span aria-hidden="true">Work</span></a>
+    <a href="#projects" class="nav__link" data-cursor="hover"><span>Projects</span><span aria-hidden="true">Projects</span></a>
+    <a href="play.html" class="nav__link nav__link--play" data-cursor="hover"><span>Play</span><span aria-hidden="true">Play</span></a>
+    <a href="#contact" class="nav__link" data-cursor="hover"><span>Contact</span><span aria-hidden="true">Contact</span></a>
   </nav>
   <div class="nav__right">
     <span class="nav__clock" id="navClock" title="Local time in Addis Ababa">--:--:-- EAT</span>
@@ -113,7 +113,7 @@
 </header>
 
 <!-- ░░ MOBILE MENU ░░ -->
-<div class="menu" id="menu" aria-hidden="true">
+<div class="menu" id="menu" aria-hidden="true" inert>
   <div class="menu__list">
     <a href="#about" class="menu__item"><em>01</em>About</a>
     <a href="#stack" class="menu__item"><em>02</em>Stack</a>
