@@ -136,6 +136,7 @@ assets/js/game.js       Pipeline Runner (play.html)
 assets/vendor/          three.module.min.js (r170)
 assets/img/             favicon + app icons, Open Graph images, company logos, game preview
 play.html               the game page
+market-floor.html       Market Floor case study
 404.html                not-found page (works under /portfolio/ and at the root)
 tools/                  résumé source + PDF build script
 ```
