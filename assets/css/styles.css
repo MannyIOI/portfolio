@@ -699,5 +699,30 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 800; line-height: 0.
 }
 .project__link:hover, .project__link:focus-visible { background: var(--acid); color: var(--ink); }
 .project__private { font-family: var(--font-mono); font-size: 0.7rem; color: var(--bone-dim); }
+/* ── fun / game teaser ─────────────────────────── */
+.fun__card {
+  display: grid; grid-template-columns: 1.35fr 1fr; align-items: stretch; overflow: hidden;
+  border: 1px solid var(--line); border-radius: 24px;
+  background: linear-gradient(135deg, var(--ink-2), var(--ink) 70%);
+  transition: border-color 0.45s var(--ease), box-shadow 0.45s var(--ease);
+}
+.fun__card:hover, .fun__card:focus-visible { border-color: rgba(215, 255, 62, 0.45); box-shadow: 0 30px 80px -40px rgba(110, 75, 255, 0.6); }
+.fun__media { position: relative; overflow: hidden; min-height: 16rem; }
+.fun__media img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease); }
+.fun__card:hover .fun__media img { transform: scale(1.05); }
+.fun__play {
+  position: absolute; left: 50%; top: 50%; display: grid; place-items: center;
+  width: 4.5rem; height: 4.5rem; margin: -2.25rem 0 0 -2.25rem; border-radius: 50%;
+  background: var(--acid); color: var(--ink); font-size: 1.2rem; padding-left: 0.2rem;
+  box-shadow: 0 0 0 10px rgba(215, 255, 62, 0.15); transition: transform 0.5s var(--ease);
+}
+.fun__card:hover .fun__play { transform: scale(1.1); }
+.fun__copy { display: flex; flex-direction: column; justify-content: center; gap: 0.9rem; padding: clamp(1.6rem, 3.5vw, 3rem); }
+.fun__kicker { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--acid); }
+.fun__copy h3 { font-size: clamp(2rem, 4vw, 3.4rem); text-transform: uppercase; letter-spacing: -0.04em; line-height: 0.95; }
+.fun__copy p { color: #b3afa7; max-width: 42ch; }
+.fun__cta { align-self: flex-start; margin-top: 0.4rem; }
+.nav__link--play span { color: var(--acid); }
+@media (max-width: 860px) { .fun__card { grid-template-columns: 1fr; } .fun__media { min-height: 0; aspect-ratio: 5 / 3; } }
 @media (max-width: 1080px) { .projects__grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 720px)  { .projects__grid { grid-template-columns: 1fr; } .project { min-height: 0; } }
