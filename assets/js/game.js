@@ -363,7 +363,7 @@ function start() {
 }
 
 function pause(on) {
-  if (on && state.mode === 'run') { state.mode = 'paused'; show(ui.pause, true); $('#resumeBtn').focus(); }
+  if (on && state.mode === 'run') { state.mode = 'paused'; hideHint(); show(ui.pause, true); $('#resumeBtn').focus(); }
   else if (!on && state.mode === 'paused') { state.mode = 'run'; show(ui.pause, false); last = performance.now(); }
 }
 
@@ -456,6 +456,7 @@ document.querySelectorAll('.touch [data-act]').forEach((b) => {
 $('#startBtn').addEventListener('click', start);
 $('#againBtn').addEventListener('click', start);
 $('#resumeBtn').addEventListener('click', () => pause(false));
+$('#pauseBtn').addEventListener('click', (e) => { pause(true); e.currentTarget.blur(); });
 
 function syncMute() {
   ui.mute.setAttribute('aria-pressed', String(sound.muted));
@@ -644,6 +645,7 @@ function frame(now) {
   if (state.mode === 'run') adapt((now - (frame.prev || now)) / 1000);
   frame.prev = now;
   if (state.mode !== 'paused') update(dt);
+  document.body.classList.toggle('is-running', state.mode === 'run');
   renderer.render(scene, camera);
   requestAnimationFrame(frame);
 }

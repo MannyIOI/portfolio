@@ -79,6 +79,8 @@
   }
   .hud__mute[aria-pressed="true"] { color: var(--bone-dim); text-decoration: line-through; }
   .hud__mute:hover, .hud__mute:focus-visible { border-color: var(--acid); }
+  .hud__pause { display: none; font-size: 0.7rem; letter-spacing: -0.1em; }
+  body.is-running .hud__pause { display: block; }
   .toast {
     position: fixed; left: 50%; top: 22%; z-index: 3; transform: translate(-50%, 10px); opacity: 0; pointer-events: none;
     font-family: var(--font-display); font-weight: 800; font-size: clamp(1.6rem, 6vw, 3rem); letter-spacing: -0.03em;
@@ -185,6 +187,7 @@
 <header class="top">
   <a class="back" href="./" aria-label="Back to portfolio"><b aria-hidden="true">←</b> <span>Back to portfolio</span></a>
   <div class="hud" aria-live="off">
+    <button class="hud__mute hud__pause" id="pauseBtn" type="button" aria-label="Pause"><span aria-hidden="true">❚❚</span></button>
     <button class="hud__mute" id="muteBtn" type="button" aria-pressed="false" aria-label="Mute sound"><span aria-hidden="true">♪</span></button>
     <div class="hud__cell"><small>SCORE</small><b id="score">0</b><i class="combo" id="combo" hidden>×2</i></div>
     <div class="hud__cell"><small>BEST</small><b id="best">0</b></div>
