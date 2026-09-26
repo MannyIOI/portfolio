@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://mannyioi.github.io/portfolio/</loc>
+    <loc>https://www.mannyioi.dev/</loc>
     <lastmod>2026-09-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://mannyioi.github.io/portfolio/play.html</loc>
+    <loc>https://www.mannyioi.dev/play.html</loc>
     <lastmod>2026-09-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://mannyioi.github.io/portfolio/market-floor.html</loc>
+    <loc>https://www.mannyioi.dev/market-floor.html</loc>
     <lastmod>2026-09-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

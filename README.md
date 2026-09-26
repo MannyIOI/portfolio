@@ -3,7 +3,7 @@
 A bold, motion-heavy personal site for a software engineer. Hand-written HTML, CSS and
 JavaScript: **no framework, no build step, no dependencies**. Open `index.html` and it runs.
 
-**Live:** https://mannyioi.github.io/portfolio/ · mirrored on [Vercel](https://portfolio-amanuels-projects-5fe1beae.vercel.app/)
+**Live:** https://www.mannyioi.dev/ · also served at https://mannyioi.github.io/portfolio/
 
 ---
 
@@ -127,7 +127,7 @@ Enable it once under *Settings → Pages → Build and deployment → Source: Gi
 
 **Netlify / Cloudflare Pages** — import the repo, no build command, output directory `.`.
 
-Using a custom domain? Update the absolute URLs in `index.html` (`og:url`, `canonical`,
+The canonical domain is `www.mannyioi.dev`. If it changes, update the absolute URLs in `index.html`, `play.html` and `market-floor.html` (`og:url`, `canonical`,
 `og:image`), `sitemap.xml` and `robots.txt`.
 
 ---

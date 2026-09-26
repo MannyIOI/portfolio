@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://mannyioi.github.io/portfolio/sitemap.xml
+Sitemap: https://www.mannyioi.dev/sitemap.xml
