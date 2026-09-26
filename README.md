@@ -16,7 +16,7 @@ JavaScript: **no framework, no build step, no dependencies**. Open `index.html` 
 
 **Motion**
 - Animated hero canvas: flow-field particles with proximity links and drifting light blobs, reactive to the pointer
-- Preloader with a real progress counter and a masked name reveal
+- Sub-second preloader with a masked name reveal (skipped on repeat visits in a session)
 - Scroll-triggered reveals (line masks, staggered fades) via `IntersectionObserver`
 - Word-by-word light-up on the about statement as you scroll through it
 - Scroll-velocity-reactive marquee, animated stat counters, hero parallax and letter-spacing drift
@@ -25,10 +25,20 @@ JavaScript: **no framework, no build step, no dependencies**. Open `index.html` 
 
 **Content**
 - Hero, about + education/current cards, stack (core vs. secondary), impact metrics band,
-  five-role experience accordion, side-projects grid, contact section with a working form, footer wordmark
+  five-role experience section with company logos and links, side-projects grid with demo/repo
+  links, a "Let's have fun" game teaser, contact section with a working form, footer wordmark
+- One-page résumé PDF (`assets/Amanuel-Teferi-Resume.pdf`) linked from the nav, hero, menu and contact
+
+**Pipeline Runner (`play.html`)**
+- A 3D endless runner in Three.js (r170, vendored in `assets/vendor/`): switch lanes, jump
+  firewalls, chain records for up to ×5, level-ups as it speeds up
+- Keyboard, swipe and on-screen controls; synthesised WebAudio sound with mute; best score in
+  `localStorage`; Web Share / clipboard score sharing; pauses when the tab is hidden
 
 **Engineering**
-- ~0 JS dependencies; two small deferred scripts
+- No runtime dependencies on the main page; two small deferred scripts
+- Works without JavaScript: `<noscript>` styles reveal everything, and a head failsafe switches to a
+  static layout if `app.js` hasn't finished within 4s
 - Canvas pauses when off-screen or when the tab is hidden; all scroll work is rAF-throttled
 - Full `prefers-reduced-motion` path — animation, grain and canvas all stand down
 - Semantic landmarks, skip link, keyboard-operable accordion with `aria-expanded`, visible focus rings
@@ -69,9 +79,17 @@ var CONFIG = {
 
 **2. `index.html`** — copy, links and meta tags.
 
-> **Set your LinkedIn URL.** The site currently ships
-> `https://www.linkedin.com/in/mannyioi` as a placeholder in three spots
-> (JSON-LD, mobile menu, contact socials). Search and replace it with your real profile URL.
+### Résumé
+
+`assets/Amanuel-Teferi-Resume.pdf` is generated from `tools/resume.html`. Edit the HTML, then
+rebuild it with Playwright:
+
+```bash
+npm i -g playwright   # once
+NODE_PATH=$(npm root -g) node tools/build-resume.js
+```
+
+Or drop in your own PDF under the same file name.
 
 Colours and type are CSS custom properties at the top of `assets/css/styles.css`:
 
@@ -114,7 +132,12 @@ assets/css/styles.css   design tokens, layout, all animation states
 assets/js/hero.js       hero canvas (particles + light blobs)
 assets/js/app.js        loader, cursor, reveals, counters, marquee, tilt,
                         accordion, menu, clock, contact form
-assets/img/             favicon, Open Graph image
+assets/js/game.js       Pipeline Runner (play.html)
+assets/vendor/          three.module.min.js (r170)
+assets/img/             favicon + app icons, Open Graph images, company logos, game preview
+play.html               the game page
+404.html                not-found page (works under /portfolio/ and at the root)
+tools/                  résumé source + PDF build script
 ```
 
 ## License
