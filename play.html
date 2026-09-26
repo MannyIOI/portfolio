@@ -172,6 +172,17 @@
   .submit__status.is-ok { color: var(--acid); }
   .submit__status.is-bad { color: var(--coral); }
   .panel--board { width: min(100%, 28rem); }
+  .panel--share { width: min(100%, 44rem); max-height: 100%; overflow-y: auto; }
+  .panel--share h2 { font-size: clamp(2rem, 7vw, 3.2rem); margin-bottom: 1rem; }
+  .card-preview { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--ink-2); }
+  .row--share { gap: 0.5rem; }
+  .row--share .btn { margin-top: 1rem; padding: 0.8rem 1.2rem; font-size: 0.72rem; }
+  #closeShare { margin-top: 0.6rem; }
+  .challenge {
+    display: inline-block; margin-bottom: 1rem; padding: 0.55rem 1rem; border: 1px solid rgba(215, 255, 62, 0.5); border-radius: 99px;
+    background: rgba(215, 255, 62, 0.1); font-family: var(--font-mono); font-size: 0.8rem; color: var(--acid);
+  }
+  .challenge[hidden] { display: none; }
   .panel--board h2 { font-size: clamp(2.2rem, 9vw, 3.6rem); margin-bottom: 1.2rem; }
   .lb { list-style: none; text-align: left; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: rgba(13, 13, 20, 0.8); }
   .lb li { display: grid; grid-template-columns: 2.4rem 1fr auto; align-items: center; gap: 0.6rem; padding: 0.62rem 1rem; border-top: 1px solid var(--line); }
@@ -238,6 +249,7 @@
 
 <div class="overlay" id="startScreen">
   <div class="panel">
+    <p class="challenge" id="challenge" hidden></p>
     <span class="kicker">Let's have fun · 3D</span>
     <h1>Pipeline <span>Runner</span></h1>
     <p>You're a data packet. Get through the pipeline without dropping a record: dodge the bugs, jump the firewalls, collect everything that glows.</p>
@@ -291,6 +303,23 @@
       <button class="btn btn--ghost" data-open-board type="button">🏆 Leaderboard</button>
       <a class="btn btn--ghost" href="./#contact">Hire the dev</a>
     </div>
+  </div>
+</div>
+
+<div class="overlay" id="shareScreen" hidden>
+  <div class="panel panel--share" role="dialog" aria-modal="true" aria-labelledby="shareTitle">
+    <span class="kicker">Brag a little</span>
+    <h2 id="shareTitle">Share your run</h2>
+    <img class="card-preview" id="cardPreview" alt="" width="1200" height="630" />
+    <div class="row row--share">
+      <button class="btn" id="nativeShare" type="button" hidden>Share…</button>
+      <a class="btn" id="downloadCard" download="pipeline-runner-score.png" href="#">Download image</a>
+      <button class="btn btn--ghost" id="copyLink" type="button">Copy challenge link</button>
+      <a class="btn btn--ghost" id="shareX" target="_blank" rel="noopener" href="#">Post on X</a>
+      <a class="btn btn--ghost" id="shareIn" target="_blank" rel="noopener" href="#">LinkedIn</a>
+    </div>
+    <p class="lb__note" id="shareNote">The link opens the game with your score as the one to beat.</p>
+    <button class="btn btn--ghost" id="closeShare" type="button">Back</button>
   </div>
 </div>
 

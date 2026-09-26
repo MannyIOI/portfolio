@@ -38,6 +38,10 @@ JavaScript: **no framework, no build step, no dependencies**. Open `index.html` 
   a private table reached only through `get_top_scores` / `submit_score`, which checks each run
   against the game's scoring rules and rate-limits per visitor. Four clearly labelled BOT rivals
   keep the board from starting empty; if the API is unreachable the board shows only the bots
+- Brag cards (`assets/js/share.js`): a 1200×630 PNG with the player's score, name, world rank,
+  stats and a snapshot of the crash, shared via the native share sheet (with the image) or
+  download / X / LinkedIn / copy. Links carry `?beat=<score>&by=<name>` so the next player sees
+  the challenge and is told whether they beat it
 
 **Engineering**
 - No runtime dependencies on the main page; two small deferred scripts

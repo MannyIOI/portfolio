@@ -5,6 +5,7 @@
    ═══════════════════════════════════════════════════════════ */
 import * as THREE from '../vendor/three.module.min.js';
 import { fetchBoard, submitRun, renderBoard } from './leaderboard.js';
+import { drawCard, cardToBlob, challengeUrl, readChallenge } from './share.js';
 
 const $ = (s) => document.querySelector(s);
 
@@ -314,7 +315,7 @@ const state = {
   lane: 1, x: 0, y: BASE_Y, vy: 0,
   speed: START_SPEED, distance: 0, records: 0,
   nextRowAt: 40, time: 0, shake: 0, tilt: 0,
-  combo: 1, comboTimer: 0, level: 1, bonus: 0,
+  combo: 1, comboTimer: 0, level: 1, bonus: 0, maxCombo: 1,
 };
 
 function score() { return Math.floor(state.distance / 2) + state.bonus; }
@@ -324,7 +325,7 @@ function reset() {
   Object.assign(state, {
     lane: 1, x: 0, y: BASE_Y, vy: 0, speed: START_SPEED, distance: 0, records: 0,
     nextRowAt: 40, time: 0, shake: 0, tilt: 0,
-    combo: 1, comboTimer: 0, level: 1, bonus: 0,
+    combo: 1, comboTimer: 0, level: 1, bonus: 0, maxCombo: 1,
   });
   ui.combo.hidden = true;
   // prefill the track so the first seconds aren't empty
@@ -391,7 +392,17 @@ function gameOver() {
   ui.kicker.textContent = `Packet dropped at ${Math.floor(state.distance)} m`;
   ui.quip.innerHTML = QUIPS[Math.floor(Math.random() * QUIPS.length)];
   prepareSubmit({ score: s, distance: state.distance, records: state.records, duration: state.time });
-  setTimeout(() => { if (state.mode === 'over') { show(ui.over, true); $('#againBtn').focus(); } }, 750);
+  lastRun = { score: s, best, distance: state.distance, records: state.records, level: state.level, maxCombo: state.maxCombo };
+  if (challenge) {
+    ui.kicker.textContent = s > challenge.score
+      ? `You beat ${challenge.by}'s ${challenge.score.toLocaleString('en-US')}!`
+      : `${(challenge.score - s + 1).toLocaleString('en-US')} short of ${challenge.by}'s ${challenge.score.toLocaleString('en-US')}`;
+  }
+  setTimeout(() => {
+    if (state.mode !== 'over') return;
+    snapshot();
+    show(ui.over, true); $('#againBtn').focus();
+  }, 750);
 }
 
 /* ── leaderboard ───────────────────────────────────────── */
@@ -427,7 +438,7 @@ lb.form.addEventListener('submit', async (e) => {
   setStatus('Submitting…');
   try {
     const r = await submitRun({ ...lb.run, name });
-    lb.submitted = { name, score: lb.run.score };
+    lb.submitted = { name, score: lb.run.score, rank: r.rank, total: r.total };
     try { localStorage.setItem('pipeline-runner-name', name); } catch (err) {}
     lb.input.disabled = true;
     setStatus(r.total > 1 ? `Saved. You're #${r.rank} of ${r.total} runs.` : 'Saved. You\'re the first on the board!', 'ok');
@@ -479,6 +490,7 @@ window.addEventListener('keydown', (e) => {
   // typing a name must not steer, restart or mute the game
   if (e.target.closest && e.target.closest('input, textarea')) return;
   if (!lb.screen.hidden) { if (k === 'Escape') closeBoard(); return; }
+  if (!sh.screen.hidden) { if (k === 'Escape') closeShare(); return; }
   if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', ' '].includes(k)) e.preventDefault();
   if (state.mode === 'menu' || state.mode === 'over') {
     if ((k === 'Enter' || k === ' ') && !e.repeat && document.activeElement?.tagName !== 'A') {
@@ -534,19 +546,71 @@ function syncMute() {
 ui.mute.addEventListener('click', (e) => { sound.toggle(); syncMute(); e.currentTarget.blur(); });
 syncMute();
 
-ui.share.addEventListener('click', async () => {
-  const url = new URL('play.html', location.href).href;
-  const text = `I scored ${ui.finalScore.textContent} on Pipeline Runner, a 3D game on Amanuel Teferi's portfolio. Beat it:`;
-  try {
-    if (navigator.share) { await navigator.share({ title: 'Pipeline Runner', text, url }); return; }
-    await navigator.clipboard.writeText(`${text} ${url}`);
-    ui.share.textContent = 'Copied to clipboard';
-  } catch (e) {
-    if (e && e.name === 'AbortError') return;
-    ui.share.textContent = 'Copy failed';
-  }
-  setTimeout(() => { ui.share.textContent = 'Share score'; }, 1800);
+/* ── brag card + challenge link ────────────────────────── */
+let lastRun = null;
+const snap = document.createElement('canvas');
+function snapshot() {
+  // WebGL clears its buffer after compositing, so render and copy in the same task
+  renderer.render(scene, camera);
+  snap.width = canvas.width; snap.height = canvas.height;
+  snap.getContext('2d').drawImage(canvas, 0, 0);
+}
+
+const sh = {
+  screen: $('#shareScreen'), img: $('#cardPreview'), native: $('#nativeShare'), download: $('#downloadCard'),
+  copy: $('#copyLink'), x: $('#shareX'), li: $('#shareIn'), note: $('#shareNote'), blob: null, url: '', text: '',
+};
+
+async function openShare() {
+  if (!lastRun) return;
+  const name = lb.submitted?.name || (lb.input.value.trim() || '');
+  const run = { ...lastRun, name, rank: lb.submitted?.rank, total: lb.submitted?.total };
+  const card = drawCard(run, snap);
+  sh.blob = await cardToBlob(card);
+  if (sh.img.src.startsWith('blob:')) URL.revokeObjectURL(sh.img.src);
+  sh.img.src = URL.createObjectURL(sh.blob);
+  sh.img.alt = `Pipeline Runner result card: ${run.score} points`;
+  sh.download.href = sh.img.src;
+
+  sh.url = challengeUrl(run.score, name);
+  const place = run.rank && run.total ? ` (#${run.rank} of ${run.total} worldwide)` : '';
+  sh.text = `I just scored ${run.score.toLocaleString('en-US')} on Pipeline Runner${place}, a 3D game on Amanuel Teferi's portfolio. Think you can beat it?`;
+  sh.x.href = 'https://x.com/intent/post?' + new URLSearchParams({ text: sh.text, url: sh.url });
+  sh.li.href = 'https://www.linkedin.com/sharing/share-offsite/?' + new URLSearchParams({ url: sh.url });
+  sh.copy.textContent = 'Copy challenge link';
+
+  const file = new File([sh.blob], 'pipeline-runner-score.png', { type: 'image/png' });
+  sh.native.hidden = !(navigator.canShare && navigator.canShare({ files: [file] }));
+  sh.native.onclick = async () => {
+    try { await navigator.share({ files: [file], title: 'Pipeline Runner', text: `${sh.text} ${sh.url}` }); }
+    catch (e) { /* cancelled */ }
+  };
+  sh.note.textContent = name
+    ? `The link opens the game with ${run.score.toLocaleString('en-US')} as the score to beat.`
+    : !lb.form.hidden ? 'Tip: submit your name to the leaderboard first and the card shows it, with your world rank.'
+    : 'The link opens the game with your score as the one to beat.';
+
+  show(ui.over, false);
+  show(sh.screen, true);
+  (sh.native.hidden ? sh.download : sh.native).focus();
+}
+function closeShare() { show(sh.screen, false); show(ui.over, true); ui.share.focus(); }
+
+ui.share.addEventListener('click', openShare);
+$('#closeShare').addEventListener('click', closeShare);
+sh.copy.addEventListener('click', async () => {
+  try { await navigator.clipboard.writeText(`${sh.text} ${sh.url}`); sh.copy.textContent = 'Copied!'; }
+  catch (e) { sh.copy.textContent = 'Copy failed'; }
+  setTimeout(() => { sh.copy.textContent = 'Copy challenge link'; }, 1800);
 });
+
+/* arriving from someone's challenge link */
+const challenge = readChallenge();
+if (challenge) {
+  const el = $('#challenge');
+  el.textContent = `🏁 ${challenge.by} challenged you: beat ${challenge.score.toLocaleString('en-US')}`;
+  el.hidden = false;
+}
 document.addEventListener('visibilitychange', () => { if (document.hidden) pause(true); });
 window.addEventListener('blur', () => pause(true));
 
@@ -634,6 +698,7 @@ function update(dt) {
           if (Math.abs(m.position.y - state.y) < 0.9) {
             state.records++;
             state.combo = state.comboTimer > 0 ? Math.min(5, state.combo + 1) : 1;
+            state.maxCombo = Math.max(state.maxCombo, state.combo);
             state.comboTimer = 1.6;
             state.bonus += RECORD_POINTS * state.combo;
             m.visible = false;
