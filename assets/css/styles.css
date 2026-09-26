@@ -717,6 +717,8 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 800; line-height: 0.
   transition: background 0.3s var(--ease), color 0.3s var(--ease);
 }
 .project__link:hover, .project__link:focus-visible { background: var(--acid); color: var(--ink); }
+.project__link--case { background: var(--acid); color: var(--ink); }
+.project__link--case:hover, .project__link--case:focus-visible { background: var(--bone); border-color: var(--bone); }
 .project__private { font-family: var(--font-mono); font-size: 0.7rem; color: var(--bone-dim); }
 /* ── fun / game teaser ─────────────────────────── */
 .fun__card {

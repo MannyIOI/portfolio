@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Market Floor case study — Amanuel Teferi</title>
+<meta name="description" content="How Market Floor works: a deterministic TypeScript market engine with a real order book, 62 computer traders, a 100-game balancing harness and server-side replay that verifies every leaderboard score." />
+<meta name="theme-color" content="#08080c" />
+<link rel="canonical" href="https://mannyioi.github.io/portfolio/market-floor.html" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Market Floor — a market where prices aren't scripted" />
+<meta property="og:description" content="Case study by Amanuel Teferi: deterministic engine, real order book, 62 computer traders, server-verified scores." />
+<meta property="og:url" content="https://mannyioi.github.io/portfolio/market-floor.html" />
+<meta property="og:image" content="https://mannyioi.github.io/portfolio/assets/img/og.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,700;12..96,75..100,800&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;700&display=swap" media="print" onload="this.media='all'" />
+
+<style>
+  :root {
+    --ink: #08080c; --ink-2: #0d0d14; --ink-3: #14141d; --bone: #f2efe8; --bone-dim: #a8a49b; --text: #c9c5bd;
+    --line: rgba(242, 239, 232, 0.12); --acid: #d7ff3e; --violet: #6e4bff; --coral: #ff5a3c; --cyan: #35e7ff;
+    --font-display: 'Bricolage Grotesque', 'Helvetica Neue', Arial, sans-serif;
+    --font-body: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+    --pad: clamp(1rem, 4vw, 3rem);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--ink); color: var(--text); font: 1.05rem/1.7 var(--font-body); -webkit-font-smoothing: antialiased; }
+  a { color: var(--acid); text-decoration: underline; text-decoration-color: rgba(215, 255, 62, 0.35); text-underline-offset: 3px; }
+  a:hover, a:focus-visible { text-decoration-color: var(--acid); }
+  :focus-visible { outline: 2px solid var(--acid); outline-offset: 3px; }
+
+  .top {
+    position: sticky; top: 0; z-index: 5; display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+    padding: 0.9rem var(--pad); background: rgba(8, 8, 12, 0.8); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line);
+  }
+  .top a { font-family: var(--font-mono); font-size: 0.74rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--bone); text-decoration: none; }
+  .top a:hover { color: var(--acid); }
+  .top .logo { font-family: var(--font-display); font-size: 1.2rem; font-weight: 800; letter-spacing: -0.04em; text-transform: none; }
+
+  main { max-width: 64rem; margin: 0 auto; padding: 0 var(--pad) 5rem; }
+  .hero { padding: clamp(3rem, 9vw, 6rem) 0 2.5rem; border-bottom: 1px solid var(--line); }
+  .kicker { font-family: var(--font-mono); font-size: 0.74rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--acid); }
+  h1 {
+    margin: 1rem 0 1.2rem; font-family: var(--font-display); font-weight: 800; color: var(--bone);
+    font-size: clamp(2.6rem, 8vw, 5.4rem); line-height: 0.92; letter-spacing: -0.045em; text-transform: uppercase;
+  }
+  h1 span { color: transparent; -webkit-text-stroke: 1.5px var(--bone); }
+  .lede { max-width: 44rem; font-size: clamp(1.1rem, 1.8vw, 1.3rem); color: var(--bone); }
+  .actions { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 1.8rem; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.85rem 1.4rem; border-radius: 99px;
+    border: 1px solid var(--line); color: var(--bone); text-decoration: none;
+    font-family: var(--font-mono); font-size: 0.76rem; letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .btn--primary { background: var(--bone); color: var(--ink); border-color: var(--bone); }
+  .btn:hover, .btn:focus-visible { background: var(--acid); color: var(--ink); border-color: var(--acid); }
+  .meta { display: flex; flex-wrap: wrap; gap: 0.4rem 1.4rem; margin-top: 1.6rem; font-family: var(--font-mono); font-size: 0.74rem; color: var(--bone-dim); }
+  .meta b { color: var(--bone); font-weight: 500; }
+
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin: 2.5rem 0; background: var(--line); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
+  .stats div { padding: 1.3rem 1.2rem; background: var(--ink-2); }
+  .stats b { display: block; font-family: var(--font-display); font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; letter-spacing: -0.03em; color: var(--bone); line-height: 1; }
+  .stats span { display: block; margin-top: 0.5rem; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.06em; color: var(--bone-dim); text-transform: uppercase; }
+  .stats div:nth-child(1) b { color: var(--acid); } .stats div:nth-child(2) b { color: var(--cyan); } .stats div:nth-child(3) b { color: var(--coral); }
+
+  section { padding: 2.2rem 0; border-bottom: 1px solid var(--line); }
+  section:last-of-type { border-bottom: 0; }
+  h2 { display: flex; gap: 0.9rem; align-items: baseline; margin-bottom: 1rem; font-family: var(--font-display); font-weight: 800; color: var(--bone); font-size: clamp(1.6rem, 3.4vw, 2.3rem); letter-spacing: -0.03em; line-height: 1.1; }
+  h2 i { font-style: normal; font-family: var(--font-mono); font-size: 0.8rem; font-weight: 400; color: var(--acid); letter-spacing: 0; }
+  p + p { margin-top: 0.9rem; }
+  strong { color: var(--bone); font-weight: 700; }
+  ul.points { list-style: none; display: grid; gap: 0.6rem; margin-top: 1rem; }
+  ul.points li { position: relative; padding-left: 1.5rem; }
+  ul.points li::before { content: '▸'; position: absolute; left: 0; color: var(--acid); }
+  code { font-family: var(--font-mono); font-size: 0.86em; color: var(--bone); background: var(--ink-3); padding: 0.1rem 0.35rem; border-radius: 5px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.2rem; }
+  .box { padding: 1.2rem 1.3rem; border: 1px solid var(--line); border-radius: 14px; background: var(--ink-2); }
+  .box h3 { margin-bottom: 0.4rem; font-family: var(--font-mono); font-size: 0.78rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--acid); }
+  .box p { font-size: 0.96rem; }
+
+  figure { margin: 1.4rem 0 0.4rem; padding: 1.2rem; border: 1px solid var(--line); border-radius: 16px; background: var(--ink-2); overflow-x: auto; }
+  figure svg { display: block; width: 100%; min-width: 640px; height: auto; }
+  figcaption { margin-top: 0.8rem; font-family: var(--font-mono); font-size: 0.74rem; color: var(--bone-dim); }
+
+  .stack { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+  .stack span { padding: 0.35rem 0.8rem; border: 1px solid var(--line); border-radius: 99px; font-family: var(--font-mono); font-size: 0.76rem; color: var(--bone); }
+
+  .end { margin-top: 3rem; padding: clamp(1.6rem, 4vw, 2.6rem); border: 1px solid var(--line); border-radius: 22px; background: linear-gradient(135deg, rgba(110, 75, 255, 0.18), transparent 60%), var(--ink-2); }
+  .end h2 { display: block; }
+
+  @media (max-width: 760px) {
+    .stats { grid-template-columns: 1fr 1fr; }
+    .two { grid-template-columns: 1fr; }
+  }
+  @media print {
+    body, .box, .stats div, figure, .end { background: #fff !important; color: #111 !important; }
+    .top, .actions { display: none; }
+    h1, h2, strong, .stats b, .lede { color: #111 !important; -webkit-text-stroke: 0 !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="logo" href="./" aria-label="Amanuel Teferi — home">AT</a>
+  <a href="./#projects">← All projects</a>
+</header>
+
+<main>
+  <div class="hero">
+    <p class="kicker">Case study · Side project</p>
+    <h1>Market Floor: <span>prices nobody scripted</span></h1>
+    <p class="lede">A browser trading game where every price comes out of a real order book. 62 computer traders with different strategies compete under the same rules as the player, so the market has to hold together on its own.</p>
+    <div class="actions">
+      <a class="btn btn--primary" href="https://market-floor.vercel.app" target="_blank" rel="noopener">Play it live ↗</a>
+      <a class="btn" href="./#contact">Talk to me about it</a>
+    </div>
+    <p class="meta"><span><b>When</b> 2026</span><span><b>Stack</b> TypeScript · Supabase · Vercel</span></p>
+  </div>
+
+  <div class="stats" role="list">
+    <div role="listitem"><b>62</b><span>Computer traders</span></div>
+    <div role="listitem"><b>340+</b><span>Unit + end-to-end tests</span></div>
+    <div role="listitem"><b>100</b><span>Games per balance run</span></div>
+    <div role="listitem"><b>&lt;1s</b><span>Server replay of a full season</span></div>
+  </div>
+
+  <section>
+    <h2><i>01</i>The problem</h2>
+    <p>Most trading games script their price charts. That's easy to build, but players learn the pattern and the market stops feeling alive. I wanted the opposite: <strong>a price that is only ever the last trade in an order book</strong>, with realistic behaviour (spreads, slippage, trends, panics) coming out of the traders instead of a formula.</p>
+    <p>That turns a game into a systems problem. The market has to stay liquid, prices have to stay sane over a 250-day season, and every run has to be reproducible, or nobody could trust a leaderboard.</p>
+  </section>
+
+  <section>
+    <h2><i>02</i>Architecture</h2>
+    <p>The core decision: <strong>the engine is pure TypeScript with zero DOM access</strong>, and all of its state is plain JSON. The browser drives <code>Game.step()</code> from an animation loop; a headless script drives the same function in a plain loop; the server runs it too. Saving is <code>JSON.stringify(state)</code>.</p>
+    <figure tabindex="0" aria-label="Architecture diagram (scrolls sideways on small screens)">
+      <svg viewBox="0 0 760 290" role="img" aria-labelledby="archTitle archDesc">
+        <title id="archTitle">Market Floor architecture</title>
+        <desc id="archDesc">The browser UI and a headless balance script both drive the same deterministic engine. Finished runs are sent as recorded commands to a Supabase edge function, which replays them with the same engine bundle before writing the score to Postgres.</desc>
+        <defs>
+          <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#a8a49b"/></marker>
+        </defs>
+        <g font-family="JetBrains Mono, monospace" font-size="12" fill="#f2efe8">
+          <rect x="10" y="20" width="190" height="70" rx="12" fill="#14141d" stroke="#35e7ff"/>
+          <text x="105" y="50" text-anchor="middle">Browser UI</text>
+          <text x="105" y="70" text-anchor="middle" fill="#a8a49b" font-size="11">charts · order ticket</text>
+          <rect x="10" y="200" width="190" height="70" rx="12" fill="#14141d" stroke="#35e7ff"/>
+          <text x="105" y="230" text-anchor="middle">Balance harness</text>
+          <text x="105" y="250" text-anchor="middle" fill="#a8a49b" font-size="11">100 headless games</text>
+
+          <rect x="270" y="20" width="220" height="250" rx="14" fill="#0d0d14" stroke="#d7ff3e"/>
+          <text x="380" y="46" text-anchor="middle" fill="#d7ff3e">Engine (pure TS)</text>
+          <g font-size="11">
+            <rect x="290" y="62" width="180" height="30" rx="7" fill="#14141d" stroke="rgba(242,239,232,.15)"/><text x="380" y="81" text-anchor="middle">seeded RNG streams</text>
+            <rect x="290" y="100" width="180" height="30" rx="7" fill="#14141d" stroke="rgba(242,239,232,.15)"/><text x="380" y="119" text-anchor="middle">hidden fair value + news</text>
+            <rect x="290" y="138" width="180" height="30" rx="7" fill="#14141d" stroke="rgba(242,239,232,.15)"/><text x="380" y="157" text-anchor="middle">order books + matching</text>
+            <rect x="290" y="176" width="180" height="30" rx="7" fill="#14141d" stroke="rgba(242,239,232,.15)"/><text x="380" y="195" text-anchor="middle">62 trader strategies</text>
+            <rect x="290" y="214" width="180" height="30" rx="7" fill="#14141d" stroke="rgba(242,239,232,.15)"/><text x="380" y="233" text-anchor="middle">accounts · margin · P&amp;L</text>
+          </g>
+
+          <rect x="560" y="20" width="190" height="90" rx="12" fill="#14141d" stroke="#6e4bff"/>
+          <text x="655" y="48" text-anchor="middle">Edge function</text>
+          <text x="655" y="68" text-anchor="middle" fill="#a8a49b" font-size="11">replays recorded</text>
+          <text x="655" y="84" text-anchor="middle" fill="#a8a49b" font-size="11">commands, same engine</text>
+          <rect x="560" y="200" width="190" height="70" rx="12" fill="#14141d" stroke="#6e4bff"/>
+          <text x="655" y="230" text-anchor="middle">Postgres</text>
+          <text x="655" y="250" text-anchor="middle" fill="#a8a49b" font-size="11">verified scores · leagues</text>
+        </g>
+        <g stroke="#a8a49b" stroke-width="1.4" fill="none">
+          <path d="M200 55H268" marker-end="url(#a)"/>
+          <path d="M200 235H268" marker-end="url(#a)"/>
+          <path d="M490 65H558" marker-end="url(#a)"/>
+          <path d="M655 110V198" marker-end="url(#a)"/>
+        </g>
+        <g font-family="JetBrains Mono, monospace" font-size="10.5" fill="#a8a49b">
+          <text x="234" y="47" text-anchor="middle">step()</text>
+          <text x="234" y="227" text-anchor="middle">step()</text>
+          <text x="524" y="57" text-anchor="middle">bundle</text>
+          <text x="662" y="158">if it matches</text>
+        </g>
+      </svg>
+      <figcaption>One engine, three callers: the game, the balancing harness and the server that checks scores.</figcaption>
+    </figure>
+    <ul class="points">
+      <li><strong>Deterministic by construction.</strong> Every random draw comes from seeded RNG streams kept in state, so the same seed plus the same player actions at the same ticks always produce the same game.</li>
+      <li><strong>No floats in the matching engine.</strong> Prices are stored as integer ticks, so the order book never compares floating-point numbers.</li>
+      <li><strong>Built in 14 milestones</strong>, each with a written "done when" test, from the RNG and fair-value process through the order book, traders, news, margin and balancing, to deployment.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2><i>03</i>A market that holds together</h2>
+    <p>Each commodity has a <strong>hidden fair value</strong>: a mean-reverting random walk in log space, with seasonality and news shocks. Nobody sees it, including the traders. They estimate it, and the price only moves when they trade.</p>
+    <div class="two">
+      <div class="box"><h3>Order book</h3><p>Limit and market orders, price-time priority, partial fills, self-trade prevention and depth-based cost estimates. Big market orders walk the book, so the player pays slippage and moves the price.</p></div>
+      <div class="box"><h3>Market makers</h3><p>Quote both sides with inventory skew and spreads that widen with volatility and fresh news, which keeps the book two-sided through shocks.</p></div>
+      <div class="box"><h3>Strategies</h3><p>Trend followers, contrarians, value investors, panic sellers, whales and noise traders, plus institutions that work big orders over days and a stop-loss crowd whose stops cascade through recent highs and lows.</p></div>
+      <div class="box"><h3>News</h3><p>51 headline templates. Some land instantly, some days later, and about one rumor in five is false: it never moves fair value, but traders believe it until the denial reaches them.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><i>04</i>Scores the server can prove</h2>
+    <p>A leaderboard is only as good as its weakest client. Instead of trusting a submitted number, the game sends <strong>the run's recorded commands</strong>. A Supabase edge function loads the same engine bundle the site serves (checked against its content hash), replays the whole market with those commands and records the score only if the result checks out. A 250-day game replays in well under a second.</p>
+    <p>This only works because of the early decision to keep the engine pure and deterministic. The same property powers save and load, "ghost" races against your best run and narrated replays.</p>
+  </section>
+
+  <section>
+    <h2><i>05</i>Testing and balancing</h2>
+    <ul class="points">
+      <li><strong>340+ automated tests</strong> across Vitest and Playwright: order-book priority and partial fills, margin calls and liquidation, save → load → continue matching an uninterrupted run, and "false rumors never move fair value" (checked by comparing twin games), plus fuzz, soak and accessibility suites.</li>
+      <li><strong>A 100-game headless balancing harness</strong> (<code>npm run balance</code>) that plays full seasons with a naive bot and a news-reading bot and checks the targets in the spec. The final run met all of them: price tracks fair value within roughly 0.7–1.8%, the book is never empty, no computer trader goes bankrupt, and 99.99% of $100k market orders fill completely.</li>
+      <li><strong>Smoke tests against the production URL</strong> as the final milestone, so "deployed" means "verified live".</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2><i>06</i>Stack</h2>
+    <div class="stack"><span>TypeScript</span><span>Vite</span><span>lightweight-charts</span><span>Supabase · Postgres · Edge Functions</span><span>Vitest</span><span>Playwright</span><span>Vercel</span><span>PWA · offline play</span></div>
+  </section>
+
+  <div class="end">
+    <h2>Why it's on this page</h2>
+    <p>It's the same kind of work I do in data platforms, at game scale: many independent producers, a system that must stay consistent under load, and results you can reproduce and verify instead of trusting.</p>
+    <div class="actions">
+      <a class="btn btn--primary" href="https://market-floor.vercel.app" target="_blank" rel="noopener">Play Market Floor ↗</a>
+      <a class="btn" href="./#contact">Get in touch</a>
+      <a class="btn" href="assets/Amanuel-Teferi-Resume.pdf" download>Résumé ↓</a>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>
