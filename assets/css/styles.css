@@ -467,7 +467,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 800; line-height: 0.
 .job.is-open .job__bar { transform: scaleY(1); transform-origin: top; }
 .job__head {
   position: relative; z-index: 1; display: grid;
-  grid-template-columns: 4rem minmax(0, 1fr) auto; gap: 1.2rem; align-items: center;
+  grid-template-columns: 4rem 3rem minmax(0, 1fr) auto; gap: 1.2rem; align-items: center;
   padding: clamp(1.4rem, 3vw, 2.4rem) 0.5rem; cursor: pointer;
   transition: padding-left 0.5s var(--ease);
 }
@@ -488,8 +488,19 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 800; line-height: 0.
   opacity: 0; overflow: hidden;
 }
 .job.is-open .job__body { grid-template-rows: 1fr; opacity: 1; }
-.job__body > * { min-height: 0; }
-.job__intro, .job__points, .job__tags { padding-inline: 0.5rem; }
+.job__inner { min-height: 0; }
+.job__intro, .job__points, .job__tags, .job__site { padding-inline: 0.5rem; }
+.job__logo {
+  display: grid; place-items: center; width: 3rem; height: 3rem; border-radius: 12px;
+  background: var(--bone); overflow: hidden;
+}
+.job__logo img { width: 72%; height: 72%; object-fit: contain; }
+.job__logo b { font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; color: var(--ink); }
+.job__site {
+  display: inline-block; margin: -0.3rem 0 1.2rem; font-family: var(--font-mono); font-size: 0.78rem;
+  color: var(--acid); text-decoration: underline; text-decoration-color: rgba(215, 255, 62, 0.35); text-underline-offset: 4px;
+}
+.job__site:hover, .job__site:focus-visible { text-decoration-color: var(--acid); }
 .job__intro { max-width: 70ch; color: #c2beb6; margin-bottom: 1.1rem; }
 .job__points { list-style: none; display: grid; gap: 0.75rem; max-width: 80ch; margin-bottom: 1.4rem; }
 .job__points li { position: relative; padding-left: 1.6rem; color: #b3afa7; font-size: 0.97rem; }
@@ -605,8 +616,9 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 800; line-height: 0.
   .burger { display: block; }
   .hero { padding-top: 7rem; }
   .hero__stats { grid-template-columns: repeat(2, 1fr); }
-  .job__head { grid-template-columns: 2.5rem minmax(0, 1fr); row-gap: 0.4rem; }
-  .job__years { grid-column: 2; }
+  .job__head { grid-template-columns: 2rem 2.5rem minmax(0, 1fr); row-gap: 0.4rem; }
+  .job__logo { width: 2.5rem; height: 2.5rem; border-radius: 10px; }
+  .job__years { grid-column: 3; }
   .hero__scroll { display: none; }
   .eyebrow-extra { display: none; }
 }
