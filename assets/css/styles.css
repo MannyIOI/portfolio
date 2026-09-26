@@ -371,7 +371,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 800; line-height: 0.
 .char-line { display: block; overflow: hidden; }
 .char-line > span { display: inline-block; transform: translateY(110%); transition: transform 0.95s var(--ease); }
 .is-in .char-line > span, .char-line.is-in > span { transform: translateY(0); }
-.word { display: inline-block; opacity: 0.16; transition: opacity 0.45s ease, color 0.45s ease; }
+.word { display: inline-block; opacity: 0.38; transition: opacity 0.45s ease, color 0.45s ease; }
 .word.is-lit { opacity: 1; }
 
 /* ── ABOUT ──────────────────────────────────────────────── */
