@@ -446,24 +446,6 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 800; line-height: 0.
 .chip--muted { color: var(--bone-dim); }
 
 /* ── IMPACT ─────────────────────────────────────────────── */
-.impact { padding-block: clamp(3rem, 8vh, 6rem); }
-.impact__inner {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
-  background: var(--line); border: 1px solid var(--line); border-radius: 20px; overflow: hidden;
-}
-.impact__item {
-  background: var(--ink-2); padding: clamp(1.4rem, 3vw, 2.4rem);
-  transition: background 0.4s ease;
-}
-.impact__item:hover { background: var(--ink-3); }
-.impact__item strong {
-  display: block; font-family: var(--font-display); font-weight: 800;
-  font-size: clamp(2.2rem, 5vw, 4.4rem); line-height: 1; letter-spacing: -0.05em;
-  font-variant-numeric: tabular-nums;
-  background: linear-gradient(120deg, var(--bone), var(--acid));
-  -webkit-background-clip: text; background-clip: text; color: transparent;
-}
-.impact__item p { margin-top: 0.8rem; color: var(--bone-dim); font-size: 0.9rem; line-height: 1.5; }
 
 /* ── WORK ───────────────────────────────────────────────── */
 .work__list { border-top: 1px solid var(--line); }
@@ -499,6 +481,30 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 800; line-height: 0.
 .job.is-open .job__body { grid-template-rows: 1fr; opacity: 1; }
 .job__inner { min-height: 0; }
 .job__intro, .job__points, .job__tags, .job__site { padding-inline: 0.5rem; }
+/* per-role headline numbers: big tiles for the current role, a compact row for the rest */
+.job__stats { display: flex; flex-wrap: wrap; gap: 1.2rem 2.6rem; margin: 0.2rem 0 1.6rem; padding-inline: 0.5rem; }
+.job__stats b {
+  display: block; font-family: var(--font-display); font-weight: 800; letter-spacing: -0.03em; line-height: 1;
+  font-size: clamp(1.6rem, 2.6vw, 2.2rem); color: var(--bone);
+}
+.job__stats span { display: block; margin-top: 0.45rem; font-family: var(--font-mono); font-size: 0.72rem; color: var(--bone-dim); }
+.job__stats--feature {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; padding: 0; margin-inline: 0.5rem;
+  border: 1px solid var(--line); border-radius: 18px; overflow: hidden; background: var(--line);
+}
+.job__stats--feature div { padding: clamp(1.1rem, 2.4vw, 1.8rem); background: var(--ink); }
+.job__stats--feature b { font-size: clamp(2.6rem, 6vw, 4.6rem); letter-spacing: -0.05em; }
+.job__stats--feature div:nth-child(1) b { color: var(--acid); }
+.job__stats--feature div:nth-child(2) b { color: var(--cyan); }
+.job__stats--feature div:nth-child(3) b { color: var(--coral); }
+.job__stats--feature span { font-size: 0.78rem; margin-top: 0.7rem; }
+@media (max-width: 640px) {
+  .job__stats { gap: 1rem 1.8rem; }
+  .job__stats--feature { gap: 1px; }
+  .job__stats--feature div { padding: 0.9rem 0.8rem; }
+  .job__stats--feature b { font-size: clamp(1.5rem, 8vw, 2.1rem); letter-spacing: -0.04em; }
+  .job__stats--feature span { font-size: 0.66rem; margin-top: 0.45rem; }
+}
 .job__logo {
   display: grid; place-items: center; width: 3rem; height: 3rem; border-radius: 12px;
   background: var(--bone); overflow: hidden;
@@ -619,7 +625,6 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 800; line-height: 0.
 /* ── RESPONSIVE ─────────────────────────────────────────── */
 @media (max-width: 1080px) {
   .about__grid, .contact__grid { grid-template-columns: 1fr; }
-  .impact__inner { grid-template-columns: repeat(2, 1fr); }
   .hero__row { grid-template-columns: 1fr; align-items: start; }
   .stack__core-list li { grid-template-columns: 3rem minmax(0, 1fr); }
   .stack__core-list p { grid-column: 2; justify-self: start; text-align: left; margin-top: 0.4rem; }
@@ -643,7 +648,6 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 800; line-height: 0.
   .hero__scroll { display: none; }
 }
 @media (max-width: 520px) {
-  .impact__inner { grid-template-columns: 1fr; }
   .hero__title { font-size: clamp(2.8rem, 17vw, 5rem); }
   .form { padding: 1.2rem; }
 }
@@ -758,7 +762,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 800; line-height: 0.
     text-shadow: none !important; -webkit-text-fill-color: currentColor !important; animation: none !important; transition: none !important;
   }
   html, body { background: #fff !important; }
-  .btn, .tag, .project, .card, .job, .impact__item { border-color: #bbb !important; }
+  .btn, .tag, .project, .card, .job, .job__stats div { border-color: #bbb !important; }
   .loader, .cursor, .grain, .scroll-progress, .nav, .menu, .hero__canvas, .hero__glow, .hero__grid,
   .hero__scroll, .marquee, .fun, .form, .card__shine, .contact__glow, .skip-link { display: none !important; }
   [data-reveal], .word, .char-line > span { opacity: 1 !important; transform: none !important; }
@@ -766,7 +770,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 800; line-height: 0.
   .hero { min-height: 0 !important; padding-top: 0 !important; }
   .hero__title .line--out, .project__idx { -webkit-text-stroke: 0 !important; color: #111 !important; }
   .section { padding-block: 1.2rem !important; }
-  .job, .project, .card, .impact__item { break-inside: avoid; }
+  .job, .project, .card { break-inside: avoid; }
   a { color: #111 !important; }
   .project__link::after, .job__site::after { content: ' (' attr(href) ')'; font-size: 0.8em; }
 }

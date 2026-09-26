@@ -24,8 +24,8 @@ JavaScript: **no framework, no build step, no dependencies**. Open `index.html` 
 - Hide-on-scroll nav, top scroll-progress bar, live Addis Ababa clock
 
 **Content**
-- Hero, about + education/current cards, stack (core vs. secondary), impact metrics band,
-  five-role experience section with company logos and links, side-projects grid with demo/repo
+- Hero, about + education/current cards, stack (core vs. secondary),
+  five-role experience section with company logos, links and per-role headline stats, side-projects grid with demo/repo
   links, a "Let's have fun" game teaser, contact section with a working form, footer wordmark
 - One-page résumé PDF (`assets/Amanuel-Teferi-Resume.pdf`) linked from the nav, hero, menu and contact
 
