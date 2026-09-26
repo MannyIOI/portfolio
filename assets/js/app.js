@@ -315,7 +315,7 @@
         job.classList.toggle('is-open', open);
         head.setAttribute('aria-expanded', String(open));
       }
-      set(i === 0);
+      set(true);
 
       function toggle() { set(!job.classList.contains('is-open')); }
       head.addEventListener('click', toggle);
