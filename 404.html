@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Page not found — Amanuel Teferi</title>
+<meta name="robots" content="noindex" />
+<meta name="theme-color" content="#08080c" />
+<style>
+  :root { --ink: #08080c; --bone: #f2efe8; --dim: #a8a49b; --line: rgba(242, 239, 232, 0.12); --acid: #d7ff3e; --violet: #6e4bff; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    display: grid; place-items: center; padding: 1.25rem; text-align: center;
+    background: radial-gradient(ellipse at 30% 20%, rgba(110, 75, 255, 0.28), transparent 55%), var(--ink);
+    color: var(--bone); font-family: 'Helvetica Neue', Arial, sans-serif;
+  }
+  main { max-width: 34rem; }
+  .code { font: 800 clamp(6rem, 30vw, 12rem)/0.85 'Helvetica Neue', Arial, sans-serif; letter-spacing: -0.06em; color: transparent; -webkit-text-stroke: 2px var(--bone); }
+  .kicker { margin-top: 1.4rem; font: 0.74rem/1 ui-monospace, Menlo, monospace; letter-spacing: 0.2em; text-transform: uppercase; color: var(--acid); }
+  h1 { margin: 0.9rem 0 0.8rem; font-size: clamp(1.6rem, 5vw, 2.4rem); letter-spacing: -0.03em; }
+  p { color: var(--dim); }
+  .row { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.7rem; margin-top: 1.8rem; }
+  a {
+    display: inline-flex; padding: 0.9rem 1.5rem; border-radius: 99px; border: 1px solid var(--line);
+    font: 0.78rem/1 ui-monospace, Menlo, monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--bone); text-decoration: none;
+  }
+  a:first-child { background: var(--bone); color: var(--ink); border-color: var(--bone); }
+  a:hover, a:focus-visible { background: var(--acid); color: var(--ink); border-color: var(--acid); }
+</style>
+</head>
+<body>
+<main>
+  <div class="code" aria-hidden="true">404</div>
+  <p class="kicker">Record not found</p>
+  <h1>This page dropped out of the pipeline.</h1>
+  <p>The link may be old or mistyped. Everything worth seeing is on the homepage.</p>
+  <div class="row">
+    <a id="home" href="/">Back to the portfolio</a>
+    <a id="play" href="/play.html">Play a game instead</a>
+  </div>
+</main>
+<script>
+  /* GitHub Pages serves this site under /portfolio/, Vercel at the root */
+  (function () {
+    var base = location.hostname.endsWith('github.io') ? '/portfolio/' : '/';
+    document.getElementById('home').href = base;
+    document.getElementById('play').href = base + 'play.html';
+  })();
+</script>
+</body>
+</html>
