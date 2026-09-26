@@ -4,7 +4,7 @@
    firewalls, collect records. Three.js (vendored, r170).
    ═══════════════════════════════════════════════════════════ */
 import * as THREE from '../vendor/three.module.min.js';
-import { fetchBoard, submitRun, renderBoard, placeRun } from './leaderboard.js';
+import { fetchBoard, submitRun, renderBoard, placeRun, placeSaved } from './leaderboard.js';
 import { drawCard, cardToBlob, challengeUrl, readChallenge } from './share.js';
 
 const $ = (s) => document.querySelector(s);
@@ -438,7 +438,7 @@ async function showOverBoard(run) {
   // if the leaderboard is unreachable (e.g. the free database is paused), don't offer to submit
   if (!b.online) lb.form.hidden = true;
   if (lb.submitted) {
-    renderBoard(overBoard.list, b.rows.slice(0, 8), lb.submitted);
+    renderBoard(overBoard.list, placeSaved(b, lb.submitted.name, 8), lb.submitted);
   } else {
     const rows = placeRun(b, run.score, 8);
     renderBoard(overBoard.list, rows);
@@ -450,7 +450,7 @@ async function showOverBoard(run) {
       : `You'd be #${you.rank}${beaten.length ? `, ahead of ${beaten[0].name}` : ''}. Add your name to save it.`;
     return;
   }
-  overBoard.note.textContent = `Saved: #${lb.submitted.rank} of ${lb.submitted.total} human runs worldwide (bots don't count).`;
+  overBoard.note.textContent = `Saved: #${lb.submitted.rank} of ${lb.submitted.total} players worldwide, ranked by each player's best run (bots don't count).`;
 }
 
 lb.form.addEventListener('submit', async (e) => {
@@ -465,7 +465,7 @@ lb.form.addEventListener('submit', async (e) => {
     lb.submitted = { name, score: lb.run.score, rank: r.rank, total: r.total };
     try { localStorage.setItem('pipeline-runner-name', name); } catch (err) {}
     lb.input.disabled = true;
-    setStatus(r.total > 1 ? `Saved. You're #${r.rank} of ${r.total} human runs.` : 'Saved. You\'re the first on the board!', 'ok');
+    setStatus(r.total > 1 ? `Saved. You're #${r.rank} of ${r.total} players.` : 'Saved. You\'re the first on the board!', 'ok');
     showOverBoard(lb.run);
   } catch (err) {
     lb.btn.disabled = false;

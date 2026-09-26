@@ -38,7 +38,7 @@ async function rpc(fn, body, timeoutMs = 6000) {
   }
 }
 
-/** Top real scores merged with the bots, best first. `online` is false if the API is unreachable. */
+/** Top real scores (one row per name, its best run) merged with the bots, best first. `online` is false if the API is unreachable. */
 export async function fetchBoard(limit = 10) {
   try {
     const rows = await rpc('get_top_scores', { max_rows: limit });
@@ -88,6 +88,14 @@ export function placeRun(board, score, limit = 8) {
   return [...sorted.slice(0, limit - 1), { gap: true }, { ...you, rank: overflow ? '50+' : rank }];
 }
 
+/** The board after saving: top `limit` rows, and the saved name's row after a gap if it's further down. */
+export function placeSaved(board, name, limit = 8) {
+  const rows = board.rows.map((r, i) => ({ ...r, rank: i + 1 }));
+  const idx = rows.findIndex((r) => !r.bot && r.name.toLowerCase() === name.toLowerCase());
+  if (idx < 0 || idx < limit) return rows.slice(0, limit);
+  return [...rows.slice(0, limit - 1), { gap: true }, rows[idx]];
+}
+
 /** Render rows into an <ol> with text nodes only (names come from other visitors). */
 export function renderBoard(ol, rows, highlight) {
   ol.replaceChildren();
@@ -96,7 +104,8 @@ export function renderBoard(ol, rows, highlight) {
     if (r.gap) { li.className = 'is-gap'; li.textContent = '···'; li.setAttribute('aria-hidden', 'true'); ol.append(li); return; }
     if (r.bot) li.className = 'is-bot';
     if (r.pending) li.classList.add('is-you', 'is-pending');
-    if (highlight && !r.bot && !r.pending && r.name === highlight.name && r.score === highlight.score) li.classList.add('is-you');
+    // one row per name (their best run), so match on the name, not this run's score
+    if (highlight && !r.bot && !r.pending && r.name.toLowerCase() === highlight.name.toLowerCase()) li.classList.add('is-you');
     const rank = document.createElement('span'); rank.className = 'lb__rank';
     rank.textContent = typeof r.rank === 'string' ? r.rank : String(r.rank || i + 1).padStart(2, '0');
     const name = document.createElement('span'); name.className = 'lb__name'; name.textContent = r.name;

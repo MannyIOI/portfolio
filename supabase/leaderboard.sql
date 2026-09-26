@@ -1,6 +1,6 @@
 -- Pipeline Runner leaderboard (Supabase project "portfolio", eu-central-1).
 -- Applied as migrations pipeline_runner_leaderboard, leaderboard_anon_only and
--- leaderboard_global_cap_and_cleanup. The table is private (RLS on, no policies);
+-- leaderboard_global_cap_and_cleanup, then leaderboard_one_row_per_name (see the bottom of this file). The table is private (RLS on, no policies);
 -- the browser can only call get_top_scores() and submit_score() with the publishable key.
 
 create extension if not exists pgcrypto with schema extensions;
@@ -90,3 +90,25 @@ revoke all on function public.get_top_scores(integer) from public, authenticated
 revoke all on function public.submit_score(text, integer, integer, integer, numeric) from public, authenticated;
 grant execute on function public.get_top_scores(integer) to anon;
 grant execute on function public.submit_score(text, integer, integer, integer, numeric) to anon;
+
+-- leaderboard_one_row_per_name: every run is kept, but the board shows one row per name
+-- (case-insensitive), that name's best run, and submit_score ranks names by their best.
+create index if not exists pipeline_scores_name_score on public.pipeline_scores (lower(name), score desc, created_at asc);
+
+create or replace function public.get_top_scores(max_rows integer default 10)
+returns table (rank bigint, name text, score integer, distance integer, created_at timestamptz)
+language sql stable security definer set search_path = public as $$
+  with best as (
+    select distinct on (lower(s.name)) s.name, s.score, s.distance, s.created_at
+    from public.pipeline_scores s
+    order by lower(s.name), s.score desc, s.created_at asc
+  )
+  select row_number() over (order by b.score desc, b.created_at asc) as rank,
+         b.name, b.score, b.distance, b.created_at
+  from best b
+  order by b.score desc, b.created_at asc
+  limit least(greatest(coalesce(max_rows, 10), 1), 50);
+$$;
+-- submit_score: same validation and limits as above; after the insert it now returns
+--   rank  = 1 + number of other names whose best beats this name's best
+--   total = number of distinct names

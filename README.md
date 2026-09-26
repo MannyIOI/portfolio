@@ -35,7 +35,8 @@ JavaScript: **no framework, no build step, no dependencies**. Open `index.html` 
 - Keyboard, swipe and on-screen controls; synthesised WebAudio sound with mute; best score in
   `localStorage`; Web Share / clipboard score sharing; pauses when the tab is hidden
 - Global leaderboard on Supabase (`assets/js/leaderboard.js`, schema in `supabase/leaderboard.sql`):
-  a private table reached only through `get_top_scores` / `submit_score`, which checks each run
+  a private table reached only through `get_top_scores` / `submit_score`; the board shows one row per
+  name (its best run), and `submit_score` checks each run
   against the game's scoring rules and rate-limits per visitor. Four clearly labelled BOT rivals
   keep the board from starting empty; if the API is unreachable the board shows only the bots
 - Brag cards (`assets/js/share.js`): a 1200×630 PNG with the player's score, name, world rank,
