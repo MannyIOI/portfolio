@@ -654,6 +654,16 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 800; line-height: 0.
   .job__body { grid-template-rows: 1fr; opacity: 1; }
 }
 
+/* ── STATIC FALLBACK ────────────────────────────────────────
+   .is-static is set by a head failsafe if app.js never finishes;
+   <noscript> in index.html applies the same rules without JS. */
+.is-static .loader, .is-static .cursor { display: none; }
+.is-static [data-reveal] { opacity: 1 !important; transform: none !important; }
+.is-static .char-line > span { transform: none !important; }
+.is-static .word { opacity: 1 !important; }
+.is-static .job__body { grid-template-rows: 1fr; opacity: 1; }
+.is-static body { overflow: auto; }
+
 /* ── PROJECTS ───────────────────────────────────────────── */
 .projects__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.1rem; }
 .project {
