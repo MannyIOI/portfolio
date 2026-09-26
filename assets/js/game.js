@@ -4,6 +4,7 @@
    firewalls, collect records. Three.js (vendored, r170).
    ═══════════════════════════════════════════════════════════ */
 import * as THREE from '../vendor/three.module.min.js';
+import { fetchBoard, submitRun, renderBoard } from './leaderboard.js';
 
 const $ = (s) => document.querySelector(s);
 
@@ -389,8 +390,73 @@ function gameOver() {
   ui.newBest.hidden = !isBest;
   ui.kicker.textContent = `Packet dropped at ${Math.floor(state.distance)} m`;
   ui.quip.innerHTML = QUIPS[Math.floor(Math.random() * QUIPS.length)];
+  prepareSubmit({ score: s, distance: state.distance, records: state.records, duration: state.time });
   setTimeout(() => { if (state.mode === 'over') { show(ui.over, true); $('#againBtn').focus(); } }, 750);
 }
+
+/* ── leaderboard ───────────────────────────────────────── */
+const lb = {
+  form: $('#submitForm'), input: $('#playerName'), btn: $('#submitBtn'), status: $('#submitStatus'),
+  screen: $('#boardScreen'), list: $('#boardList'), note: $('#boardNote'),
+  run: null, submitted: null, returnTo: null,
+};
+try { lb.input.value = localStorage.getItem('pipeline-runner-name') || ''; } catch (e) {}
+
+function setStatus(msg, kind) {
+  lb.status.textContent = msg;
+  lb.status.className = 'submit__status' + (kind ? ' is-' + kind : '');
+}
+
+function prepareSubmit(run) {
+  lb.run = run;
+  lb.submitted = null;
+  lb.btn.disabled = false;
+  lb.input.disabled = false;
+  setStatus('');
+  lb.form.hidden = run.score < 1;
+  // if the leaderboard is unreachable (e.g. the free database is paused), don't offer to submit
+  fetchBoard(1).then((b) => { if (!b.online && lb.run === run) lb.form.hidden = true; });
+}
+
+lb.form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (!lb.run || lb.submitted) return;
+  const name = lb.input.value.trim().replace(/\s+/g, ' ');
+  if (!/^[\p{L}\p{N} ._'-]{2,16}$/u.test(name)) { setStatus('Use 2–16 letters, numbers or spaces.', 'bad'); lb.input.focus(); return; }
+  lb.btn.disabled = true;
+  setStatus('Submitting…');
+  try {
+    const r = await submitRun({ ...lb.run, name });
+    lb.submitted = { name, score: lb.run.score };
+    try { localStorage.setItem('pipeline-runner-name', name); } catch (err) {}
+    lb.input.disabled = true;
+    setStatus(r.total > 1 ? `Saved. You're #${r.rank} of ${r.total} runs.` : 'Saved. You\'re the first on the board!', 'ok');
+  } catch (err) {
+    lb.btn.disabled = false;
+    setStatus(err.message, 'bad');
+  }
+});
+
+async function openBoard() {
+  lb.returnTo = !ui.over.hidden ? ui.over : (!ui.start.hidden ? ui.start : null);
+  if (lb.returnTo) show(lb.returnTo, false);
+  show(lb.screen, true);
+  lb.note.textContent = 'Loading…';
+  lb.list.replaceChildren();
+  $('#closeBoard').focus();
+  const b = await fetchBoard(10);
+  renderBoard(lb.list, b.rows, lb.submitted);
+  lb.note.textContent = !b.online
+    ? 'Live scores are offline right now, so only the bots are showing.'
+    : b.players === 0 ? 'No human runs yet. Beat a bot and claim the top spot.'
+    : 'BOT rows are built-in rivals. Everyone else played this page.';
+}
+function closeBoard() {
+  show(lb.screen, false);
+  if (lb.returnTo) { show(lb.returnTo, true); lb.returnTo.querySelector('button')?.focus(); }
+}
+document.querySelectorAll('[data-open-board]').forEach((b) => b.addEventListener('click', openBoard));
+$('#closeBoard').addEventListener('click', closeBoard);
 
 /* ── input ─────────────────────────────────────────────── */
 function move(dir) {
@@ -410,6 +476,9 @@ function drop() {
 
 window.addEventListener('keydown', (e) => {
   const k = e.key;
+  // typing a name must not steer, restart or mute the game
+  if (e.target.closest && e.target.closest('input, textarea')) return;
+  if (!lb.screen.hidden) { if (k === 'Escape') closeBoard(); return; }
   if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', ' '].includes(k)) e.preventDefault();
   if (state.mode === 'menu' || state.mode === 'over') {
     if ((k === 'Enter' || k === ' ') && !e.repeat && document.activeElement?.tagName !== 'A') {

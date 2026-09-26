@@ -157,6 +157,34 @@
   .final .hi b { color: var(--acid); }
   .new-best { margin-top: 0.4rem; font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.14em; color: var(--acid); text-transform: uppercase; }
   .quip { margin-top: 1rem; font-size: 0.95rem; }
+  .submit { margin: 1.1rem auto 0; max-width: 26rem; text-align: left; }
+  .submit[hidden] { display: none; }
+  .submit label { display: block; margin-bottom: 0.45rem; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--bone-dim); }
+  .submit__row { display: flex; gap: 0.5rem; }
+  .submit input {
+    flex: 1; min-width: 0; padding: 0.8rem 1rem; border: 1px solid var(--line); border-radius: 99px; background: rgba(13, 13, 20, 0.85);
+    color: var(--bone); font: 500 1rem var(--font-body); -webkit-user-select: text; user-select: text;
+  }
+  .submit input:focus { outline: none; border-color: var(--acid); }
+  .submit .btn { margin-top: 0; padding: 0.8rem 1.2rem; }
+  .submit .btn:disabled { opacity: 0.5; cursor: default; transform: none; }
+  .submit__status { min-height: 1.3em; margin-top: 0.45rem; font-size: 0.85rem; color: var(--bone-dim); }
+  .submit__status.is-ok { color: var(--acid); }
+  .submit__status.is-bad { color: var(--coral); }
+  .panel--board { width: min(100%, 28rem); }
+  .panel--board h2 { font-size: clamp(2.2rem, 9vw, 3.6rem); margin-bottom: 1.2rem; }
+  .lb { list-style: none; text-align: left; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: rgba(13, 13, 20, 0.8); }
+  .lb li { display: grid; grid-template-columns: 2.4rem 1fr auto; align-items: center; gap: 0.6rem; padding: 0.62rem 1rem; border-top: 1px solid var(--line); }
+  .lb li:first-child { border-top: 0; }
+  .lb__rank { font-family: var(--font-mono); font-size: 0.78rem; color: var(--bone-dim); }
+  .lb li:nth-child(1) .lb__rank { color: var(--acid); }
+  .lb__name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--bone); }
+  .lb__name i { padding: 0.05rem 0.4rem; border: 1px solid var(--line); border-radius: 5px; font-family: var(--font-mono); font-size: 0.6rem; font-style: normal; letter-spacing: 0.1em; color: var(--bone-dim); vertical-align: 2px; }
+  .lb__score { font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--bone); }
+  .lb li.is-bot .lb__name, .lb li.is-bot .lb__score { color: var(--bone-dim); }
+  .lb li.is-you { background: rgba(215, 255, 62, 0.1); }
+  .lb li.is-you .lb__name::after { content: '  ← you'; font-family: var(--font-mono); font-size: 0.7rem; color: var(--acid); }
+  .lb__note { margin-top: 0.8rem; font-family: var(--font-mono); font-size: 0.72rem; color: var(--bone-dim); }
   .quip a { color: var(--acid); border-bottom: 1px solid rgba(215, 255, 62, 0.4); }
 
   .touch {
@@ -224,7 +252,10 @@
       <span><kbd>P</kbd>pause · <kbd>M</kbd>mute</span>
     </div>
     <p class="touch-hint">Swipe or use the buttons to switch lanes and jump.</p>
-    <button class="btn" id="startBtn" type="button">Start run <span aria-hidden="true">→</span></button>
+    <div class="row">
+      <button class="btn" id="startBtn" type="button">Start run <span aria-hidden="true">→</span></button>
+      <button class="btn btn--ghost" data-open-board type="button">🏆 Leaderboard</button>
+    </div>
   </div>
 </div>
 
@@ -245,12 +276,31 @@
       <div class="hi"><small>BEST</small><b id="finalBest">0</b></div>
     </div>
     <p class="new-best" id="newBest" hidden>New personal best</p>
+    <form class="submit" id="submitForm" novalidate>
+      <label for="playerName">Put your run on the global leaderboard</label>
+      <div class="submit__row">
+        <input id="playerName" name="name" type="text" maxlength="16" autocomplete="nickname" placeholder="Your name or initials" required />
+        <button class="btn" type="submit" id="submitBtn">Submit</button>
+      </div>
+      <p class="submit__status" id="submitStatus" role="status" aria-live="polite"></p>
+    </form>
     <p class="quip" id="quip"></p>
     <div class="row">
       <button class="btn" id="againBtn" type="button">Run it again <span aria-hidden="true">↻</span></button>
       <button class="btn btn--ghost" id="shareBtn" type="button">Share score</button>
+      <button class="btn btn--ghost" data-open-board type="button">🏆 Leaderboard</button>
       <a class="btn btn--ghost" href="./#contact">Hire the dev</a>
     </div>
+  </div>
+</div>
+
+<div class="overlay" id="boardScreen" hidden>
+  <div class="panel panel--board" role="dialog" aria-modal="true" aria-labelledby="boardTitle">
+    <span class="kicker">Global leaderboard</span>
+    <h2 id="boardTitle">Top runners</h2>
+    <ol class="lb" id="boardList" aria-live="polite"></ol>
+    <p class="lb__note" id="boardNote"></p>
+    <button class="btn" id="closeBoard" type="button">Back</button>
   </div>
 </div>
 
