@@ -745,3 +745,26 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 800; line-height: 0.
 @media (max-width: 860px) { .fun__card { grid-template-columns: 1fr; } .fun__media { min-height: 0; aspect-ratio: 5 / 3; } }
 @media (max-width: 1080px) { .projects__grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 720px)  { .projects__grid { grid-template-columns: 1fr; } .project { min-height: 0; } }
+
+/* ── PRINT ──────────────────────────────────────────────────
+   A clean, ink-friendly version for recruiters who hit Ctrl+P.
+   The one-page résumé PDF is still the better handout. */
+@media print {
+  :root { --ink: #fff; --ink-2: #fff; --bone: #111; --bone-dim: #444; --line: #ccc; }
+  *, *::before, *::after {
+    color: #111 !important; background: transparent !important; box-shadow: none !important;
+    text-shadow: none !important; -webkit-text-fill-color: currentColor !important; animation: none !important; transition: none !important;
+  }
+  html, body { background: #fff !important; }
+  .btn, .tag, .project, .card, .job, .impact__item { border-color: #bbb !important; }
+  .loader, .cursor, .grain, .scroll-progress, .nav, .menu, .hero__canvas, .hero__glow, .hero__grid,
+  .hero__scroll, .marquee, .fun, .form, .card__shine, .contact__glow, .skip-link { display: none !important; }
+  [data-reveal], .word, .char-line > span { opacity: 1 !important; transform: none !important; }
+  .job__body { grid-template-rows: 1fr !important; opacity: 1 !important; }
+  .hero { min-height: 0 !important; padding-top: 0 !important; }
+  .hero__title .line--out, .project__idx { -webkit-text-stroke: 0 !important; color: #111 !important; }
+  .section { padding-block: 1.2rem !important; }
+  .job, .project, .card, .impact__item { break-inside: avoid; }
+  a { color: #111 !important; }
+  .project__link::after, .job__site::after { content: ' (' attr(href) ')'; font-size: 0.8em; }
+}

@@ -125,6 +125,13 @@
   }
 
   var counters = $$('[data-count]');
+  /* printing mid-count would freeze a half-animated number on paper */
+  window.addEventListener('beforeprint', function () {
+    counters.forEach(function (el) {
+      var d = parseInt(el.getAttribute('data-decimals') || '0', 10), v = parseFloat(el.getAttribute('data-count')) || 0;
+      el.textContent = (el.getAttribute('data-prefix') || '') + (d ? v.toFixed(d) : v.toLocaleString('en-US')) + (el.getAttribute('data-suffix') || '');
+    });
+  });
   /* the HTML carries the final values (for no-JS and link previews); zero them before animating */
   if (!reduced && 'IntersectionObserver' in window) {
     counters.forEach(function (el) {
