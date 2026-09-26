@@ -671,5 +671,13 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 800; line-height: 0.
   padding: 0.3rem 0.75rem; border: 1px solid var(--line); border-radius: 99px;
   font-family: var(--font-mono); font-size: 0.68rem; color: var(--bone-dim);
 }
+.project__links { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+.project__link {
+  padding: 0.45rem 0.9rem; border: 1px solid rgba(215, 255, 62, 0.4); border-radius: 99px;
+  font-family: var(--font-mono); font-size: 0.72rem; color: var(--acid);
+  transition: background 0.3s var(--ease), color 0.3s var(--ease);
+}
+.project__link:hover, .project__link:focus-visible { background: var(--acid); color: var(--ink); }
+.project__private { font-family: var(--font-mono); font-size: 0.7rem; color: var(--bone-dim); }
 @media (max-width: 1080px) { .projects__grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 720px)  { .projects__grid { grid-template-columns: 1fr; } .project { min-height: 0; } }
