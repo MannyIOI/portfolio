@@ -629,7 +629,9 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 800; line-height: 0.
   .job__logo { width: 2.5rem; height: 2.5rem; border-radius: 10px; }
   .job__years { grid-column: 3; }
   .hero__scroll { display: none; }
-  .eyebrow-extra { display: block; margin-top: 0.35rem; color: var(--acid); }
+  .hero__eyebrow { display: block; line-height: 1.7; }
+  .hero__eyebrow .dot { display: inline-block; margin-right: 0.6rem; vertical-align: 1px; }
+  .eyebrow-extra { display: block; margin-top: 0.3rem; color: var(--acid); }
   .eyebrow-extra .sep { display: none; }
 }
 @media (max-height: 720px) {

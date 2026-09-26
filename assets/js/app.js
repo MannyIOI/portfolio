@@ -125,6 +125,13 @@
   }
 
   var counters = $$('[data-count]');
+  /* the HTML carries the final values (for no-JS and link previews); zero them before animating */
+  if (!reduced && 'IntersectionObserver' in window) {
+    counters.forEach(function (el) {
+      var d = parseInt(el.getAttribute('data-decimals') || '0', 10);
+      el.textContent = (el.getAttribute('data-prefix') || '') + (0).toFixed(d) + (el.getAttribute('data-suffix') || '');
+    });
+  }
   if ('IntersectionObserver' in window && counters.length) {
     var cio = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
