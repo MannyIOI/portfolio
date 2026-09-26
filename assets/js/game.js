@@ -4,7 +4,7 @@
    firewalls, collect records. Three.js (vendored, r170).
    ═══════════════════════════════════════════════════════════ */
 import * as THREE from '../vendor/three.module.min.js';
-import { fetchBoard, submitRun, renderBoard } from './leaderboard.js';
+import { fetchBoard, submitRun, renderBoard, placeRun } from './leaderboard.js';
 import { drawCard, cardToBlob, challengeUrl, readChallenge } from './share.js';
 
 const $ = (s) => document.querySelector(s);
@@ -425,8 +425,32 @@ function prepareSubmit(run) {
   lb.input.disabled = false;
   setStatus('');
   lb.form.hidden = run.score < 1;
+  showOverBoard(run);
+}
+
+/* the game-over screen shows the board straight away, with this run placed on it */
+const overBoard = { list: $('#overBoard'), note: $('#overBoardNote') };
+async function showOverBoard(run) {
+  overBoard.list.replaceChildren();
+  overBoard.note.textContent = 'Loading the leaderboard…';
+  const b = await fetchBoard(50);
+  if (lb.run !== run) return;                       // a newer run already replaced this one
   // if the leaderboard is unreachable (e.g. the free database is paused), don't offer to submit
-  fetchBoard(1).then((b) => { if (!b.online && lb.run === run) lb.form.hidden = true; });
+  if (!b.online) lb.form.hidden = true;
+  if (lb.submitted) {
+    renderBoard(overBoard.list, b.rows.slice(0, 8), lb.submitted);
+  } else {
+    const rows = placeRun(b, run.score, 8);
+    renderBoard(overBoard.list, rows);
+    const you = rows.find((r) => r.pending);
+    const beaten = b.rows.filter((r) => r.score < run.score);
+    overBoard.note.textContent = !b.online
+      ? 'Live scores are offline right now, so only the bots are showing.'
+      : run.score < 1 ? ''
+      : `You'd be #${you.rank}${beaten.length ? `, ahead of ${beaten[0].name}` : ''}. Add your name to save it.`;
+    return;
+  }
+  overBoard.note.textContent = `Saved: #${lb.submitted.rank} of ${lb.submitted.total} human runs worldwide (bots don't count).`;
 }
 
 lb.form.addEventListener('submit', async (e) => {
@@ -441,7 +465,8 @@ lb.form.addEventListener('submit', async (e) => {
     lb.submitted = { name, score: lb.run.score, rank: r.rank, total: r.total };
     try { localStorage.setItem('pipeline-runner-name', name); } catch (err) {}
     lb.input.disabled = true;
-    setStatus(r.total > 1 ? `Saved. You're #${r.rank} of ${r.total} runs.` : 'Saved. You\'re the first on the board!', 'ok');
+    setStatus(r.total > 1 ? `Saved. You're #${r.rank} of ${r.total} human runs.` : 'Saved. You\'re the first on the board!', 'ok');
+    showOverBoard(lb.run);
   } catch (err) {
     lb.btn.disabled = false;
     setStatus(err.message, 'bad');

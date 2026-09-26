@@ -71,16 +71,37 @@ export async function submitRun({ name, score, distance, records, duration }) {
   }
 }
 
+/**
+ * Places an unsaved run on the board: top `limit` rows with a "You" row at its rank.
+ * If the run falls outside them, the list ends with a gap and the run at its real position.
+ * `board` should come from fetchBoard() with a larger limit (e.g. 50) so the rank is accurate.
+ */
+export function placeRun(board, score, limit = 8) {
+  const all = board.rows.map((r) => ({ ...r }));
+  let rank = all.filter((r) => r.score >= score).length + 1;
+  const you = { name: 'You', score, bot: false, pending: true };
+  const sorted = [...all];
+  sorted.splice(rank - 1, 0, you);
+  sorted.forEach((r, i) => { r.rank = i + 1; });
+  if (rank <= limit) return sorted.slice(0, limit);
+  const overflow = rank > all.length && all.length >= 50;   // beyond what we fetched
+  return [...sorted.slice(0, limit - 1), { gap: true }, { ...you, rank: overflow ? '50+' : rank }];
+}
+
 /** Render rows into an <ol> with text nodes only (names come from other visitors). */
 export function renderBoard(ol, rows, highlight) {
   ol.replaceChildren();
   rows.forEach((r, i) => {
     const li = document.createElement('li');
+    if (r.gap) { li.className = 'is-gap'; li.textContent = '···'; li.setAttribute('aria-hidden', 'true'); ol.append(li); return; }
     if (r.bot) li.className = 'is-bot';
-    if (highlight && !r.bot && r.name === highlight.name && r.score === highlight.score) li.classList.add('is-you');
-    const rank = document.createElement('span'); rank.className = 'lb__rank'; rank.textContent = String(i + 1).padStart(2, '0');
+    if (r.pending) li.classList.add('is-you', 'is-pending');
+    if (highlight && !r.bot && !r.pending && r.name === highlight.name && r.score === highlight.score) li.classList.add('is-you');
+    const rank = document.createElement('span'); rank.className = 'lb__rank';
+    rank.textContent = typeof r.rank === 'string' ? r.rank : String(r.rank || i + 1).padStart(2, '0');
     const name = document.createElement('span'); name.className = 'lb__name'; name.textContent = r.name;
     if (r.bot) { const tag = document.createElement('i'); tag.textContent = 'BOT'; name.append(' ', tag); }
+    if (r.pending) { const tag = document.createElement('i'); tag.textContent = 'NOT SAVED'; name.append(' ', tag); }
     const score = document.createElement('span'); score.className = 'lb__score'; score.textContent = r.score.toLocaleString('en-US');
     li.append(rank, name, score);
     ol.append(li);
