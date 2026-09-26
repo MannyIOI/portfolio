@@ -42,16 +42,21 @@
       revealHero();
     }
 
+    /* repeat visits in the same tab session skip the intro entirely */
+    var seen = false;
+    try { seen = sessionStorage.getItem('at-intro') === '1'; sessionStorage.setItem('at-intro', '1'); } catch (e) {}
+    if (seen || reduced) { el.style.transition = 'none'; finish(); return; }
+
     var timer = setInterval(function () {
-      var ceiling = loaded ? 100 : 92;
-      pct = Math.min(ceiling, pct + Math.random() * 9 + 2);
+      var ceiling = loaded ? 100 : 90;
+      pct = Math.min(ceiling, pct + Math.random() * 10 + 9);
       if (bar) bar.style.width = pct + '%';
       if (num) num.textContent = String(Math.floor(pct)).padStart(2, '0');
-      if (pct >= 100) { clearInterval(timer); setTimeout(finish, 320); }
-    }, reduced ? 20 : 90);
+      if (pct >= 100) { clearInterval(timer); setTimeout(finish, 120); }
+    }, 45);
 
     /* never let a slow font or image hold the page hostage */
-    setTimeout(function () { loaded = true; }, 3500);
+    setTimeout(function () { loaded = true; }, 900);
   })();
 
   function revealHero() {

@@ -1,0 +1,118 @@
+<!doctype html>
+<!--
+  Source for assets/Amanuel-Teferi-Resume.pdf.
+  Regenerate with: node tools/build-resume.js   (needs Playwright + Chromium)
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Amanuel Teferi — Résumé</title>
+<style>
+  @page { size: A4; margin: 13mm 14mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font: 9.4pt/1.42 "Helvetica Neue", Helvetica, Arial, sans-serif; color: #16161a; }
+  a { color: inherit; text-decoration: none; }
+  header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #16161a; padding-bottom: 7px; }
+  h1 { font-size: 22pt; letter-spacing: -0.02em; line-height: 1; }
+  .title { font-size: 10.5pt; font-weight: 600; color: #4a3fd1; margin-top: 4px; }
+  .contact { text-align: right; font-size: 8.6pt; line-height: 1.55; color: #333; }
+  h2 { font-size: 8.6pt; letter-spacing: 0.14em; text-transform: uppercase; color: #4a3fd1; margin: 11px 0 5px; }
+  .summary { color: #2a2a30; }
+  .role { margin-bottom: 7px; break-inside: avoid; }
+  .role__head { display: flex; justify-content: space-between; gap: 12px; }
+  .role__head b { font-size: 10pt; }
+  .role__head span { color: #555; white-space: nowrap; font-size: 8.8pt; }
+  .role__sub { color: #555; font-size: 8.8pt; margin-bottom: 2px; }
+  ul { padding-left: 13px; }
+  li { margin: 1px 0; }
+  li::marker { color: #4a3fd1; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px 18px; }
+  .proj b { font-size: 9.4pt; }
+  .skills p { margin: 1px 0; }
+  .skills b { display: inline-block; min-width: 72px; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Amanuel Teferi</h1>
+    <p class="title">Data Platform Engineer · Backend &amp; Full-Stack</p>
+  </div>
+  <div class="contact">
+    Addis Ababa, Ethiopia · Remote (UTC+3)<br />
+    <a href="mailto:aman.teferi.80@gmail.com">aman.teferi.80@gmail.com</a><br />
+    <a href="https://www.linkedin.com/in/mannyioi/">linkedin.com/in/mannyioi</a> ·
+    <a href="https://github.com/MannyIOI">github.com/MannyIOI</a><br />
+    <a href="https://mannyioi.github.io/portfolio/">mannyioi.github.io/portfolio</a>
+  </div>
+</header>
+
+<h2>Summary</h2>
+<p class="summary">
+  Data platform engineer with 5+ years building backend and data systems for teams in the US, Singapore and the UAE.
+  Built pipelines tracking ~20 million creators, crawlers pulling 80% more data and APIs cut from seconds to
+  milliseconds. Node.js, TypeScript and Python at the core; React and React Native on the front.
+</p>
+
+<h2>Experience</h2>
+<div class="role">
+  <div class="role__head"><b>Affable → Bazaarvoice — Data Platform Engineer</b><span>Feb 2022 — Present</span></div>
+  <p class="role__sub">Remote · Influencer marketing platform, acquired by Bazaarvoice</p>
+  <ul>
+    <li>Built backend and data platform systems tracking ~20 million influencers across YouTube, TikTok, Facebook and Instagram, ingesting millions of data points.</li>
+    <li>Led the TikTok API integration end to end; optimized crawler functions to pull 80% more data.</li>
+    <li>Built an LLM-integrated face analysis tool predicting age and gender at 94% accuracy, and a data embedder enabling semantic vector search.</li>
+    <li>Implemented monitoring for distributed data pipelines, surfacing failures before they spread.</li>
+  </ul>
+</div>
+<div class="role">
+  <div class="role__head"><b>Synapse — Full-Stack Developer (part-time)</b><span>Jun 2026 — Present</span></div>
+  <p class="role__sub">US · USMLE exam preparation platform</p>
+  <ul>
+    <li>Cut test creation load time from 4–5 s to ~0.8 s; raised Lighthouse scores from the 70s–80s to 99 across every metric.</li>
+    <li>Leading the Computer-Simulated Case (CCS) project for USMLE Step 3.</li>
+  </ul>
+</div>
+<div class="role">
+  <div class="role__head"><b>DriveHive — Full-Stack Developer</b><span>Jan 2024 — Apr 2025</span></div>
+  <p class="role__sub">San Francisco, US · Car leasing for rideshare drivers</p>
+  <ul>
+    <li>Cut daily payment processing time by ~60% by restructuring the backend; reduced redundant database queries by 70%.</li>
+    <li>Integrated Stripe payments across the vehicle fleet and built real-time vehicle status monitoring from telematics data.</li>
+    <li>Shipped a new UI and backend for a credit-union acquisition in under a month; one of two engineers maintaining the whole platform.</li>
+  </ul>
+</div>
+<div class="role">
+  <div class="role__head"><b>Shilengae — Full-Stack Developer, Backend &amp; Mobile</b><span>Feb — Dec 2021</span></div>
+  <p class="role__sub">Dubai, UAE · Remote · E-commerce platform</p>
+  <ul>
+    <li>Rebuilt the Django server and React Native app from scratch to support ~1,000 concurrent users; connected React front ends to microservices via GraphQL.</li>
+  </ul>
+</div>
+<div class="role">
+  <div class="role__head"><b>Betesemay — Junior Developer</b><span>2020 · 1 year</span></div>
+  <p class="role__sub">Addis Ababa · Moogter debate platform</p>
+  <ul>
+    <li>Shipped a Django + Angular platform under an election deadline; cut a key database query time in half.</li>
+  </ul>
+</div>
+
+<h2>Selected projects</h2>
+<div class="grid">
+  <p class="proj"><b>Market Floor</b> — browser trading game with a real order book and 62 AI traders. TypeScript, Supabase. market-floor.vercel.app</p>
+  <p class="proj"><b>Vault</b> — retail inventory, sales and treasury app. Next.js 15, Supabase/Postgres RLS, Gemini.</p>
+  <p class="proj"><b>Kinetic</b> — market-replay terminal over live market data. React, Express, Gemini.</p>
+  <p class="proj"><b>Ras Trading</b> — led a team shipping a stock trading app for the Ethiopian exchange. React Native, Express.</p>
+</div>
+
+<h2>Skills</h2>
+<div class="skills">
+  <p><b>Core</b> Node.js, Express, TypeScript, Python, React</p>
+  <p><b>Data</b> PostgreSQL, MongoDB, Elasticsearch, Cassandra, data pipelines, vector search, LLM tooling</p>
+  <p><b>Also</b> Django, Angular, React Native, GraphQL, Next.js, AWS, GCP, Grafana, Stripe</p>
+</div>
+
+<h2>Education</h2>
+<div class="role__head"><b>BSc, Software Engineering — Addis Ababa Institute of Technology · GPA 3.75</b><span>2016 — 2021</span></div>
+</body>
+</html>
