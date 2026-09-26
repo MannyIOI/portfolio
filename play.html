@@ -86,6 +86,19 @@
     transition: opacity 0.3s ease, transform 0.5s var(--ease);
   }
   .toast.is-on { opacity: 1; transform: translate(-50%, 0); }
+  .hint {
+    position: fixed; left: 50%; bottom: 18%; z-index: 3; transform: translateX(-50%); opacity: 0; pointer-events: none;
+    padding: 0.7rem 1.1rem; border: 1px solid var(--line); border-radius: 99px; background: rgba(8, 8, 12, 0.7);
+    backdrop-filter: blur(8px); font-family: var(--font-mono); font-size: 0.78rem; color: var(--bone); white-space: nowrap;
+    transition: opacity 0.4s ease;
+  }
+  .hint.is-on { opacity: 1; animation: bob 1.6s ease-in-out infinite; }
+  @keyframes bob { 50% { transform: translate(-50%, -6px); } }
+  .hint kbd { padding: 0.1rem 0.4rem; border: 1px solid var(--line); border-radius: 5px; font-family: inherit; }
+  .hint__touch { display: none; }
+  body.is-touch .hint__keys { display: none; }
+  body.is-touch .hint__touch { display: inline; }
+  body.is-touch .hint { bottom: 20%; }
   .toast small { display: block; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 400; letter-spacing: 0.18em; color: var(--bone); text-align: center; }
 
   .overlay {
@@ -164,6 +177,10 @@
 <canvas id="stage" aria-label="Pipeline Runner game" role="img"></canvas>
 <div class="flash" id="flash" aria-hidden="true"></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="hint" id="hint" aria-hidden="true">
+  <span class="hint__keys"><kbd>←</kbd><kbd>→</kbd> switch lanes &nbsp;·&nbsp; <kbd>Space</kbd> jump</span>
+  <span class="hint__touch">Swipe ← → to switch lanes · tap to jump</span>
+</div>
 
 <header class="top">
   <a class="back" href="./" aria-label="Back to portfolio"><b aria-hidden="true">←</b> <span>Back to portfolio</span></a>

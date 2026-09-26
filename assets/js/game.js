@@ -301,7 +301,7 @@ const ui = {
   start: $('#startScreen'), pause: $('#pauseScreen'), over: $('#overScreen'),
   finalScore: $('#finalScore'), finalBest: $('#finalBest'), newBest: $('#newBest'),
   quip: $('#quip'), kicker: $('#overKicker'), flash: $('#flash'),
-  combo: $('#combo'), toast: $('#toast'), mute: $('#muteBtn'), share: $('#shareBtn'),
+  combo: $('#combo'), toast: $('#toast'), mute: $('#muteBtn'), share: $('#shareBtn'), hint: $('#hint'),
 };
 
 let best = 0;
@@ -343,9 +343,20 @@ function toast(title, sub) {
 }
 const LEVELS = ['', '', 'Throughput up', 'Peak traffic', 'Black Friday', 'Viral spike', 'Full firehose'];
 
+let hintTimer;
+function hideHint() { ui.hint.classList.remove('is-on'); clearTimeout(hintTimer); }
+function showHint() {
+  let runs = 0;
+  try { runs = parseInt(localStorage.getItem('pipeline-runner-runs') || '0', 10) || 0; localStorage.setItem('pipeline-runner-runs', String(runs + 1)); } catch (e) {}
+  if (runs >= 3) return;
+  ui.hint.classList.add('is-on');
+  hintTimer = setTimeout(hideHint, 5000);
+}
+
 function start() {
   sound.unlock();
   reset();
+  showHint();
   state.mode = 'run';
   show(ui.start, false); show(ui.over, false); show(ui.pause, false);
   canvas.focus?.();
@@ -358,6 +369,7 @@ function pause(on) {
 
 function gameOver() {
   state.mode = 'over';
+  hideHint();
   fireBurst(player.position, COLORS.coral, 1.3);
   player.visible = false;
   state.shake = 0.6;
@@ -383,11 +395,13 @@ function gameOver() {
 /* ── input ─────────────────────────────────────────────── */
 function move(dir) {
   if (state.mode !== 'run') return;
+  hideHint();
   const next = Math.max(0, Math.min(2, state.lane + dir));
   if (next !== state.lane) { state.lane = next; state.tilt = -dir * 0.5; sound.lane(); }
 }
 function jump() {
   if (state.mode !== 'run') return;
+  hideHint();
   if (state.y <= BASE_Y + 0.01) { state.vy = JUMP_V; sound.jump(); }
 }
 function drop() {
@@ -610,9 +624,25 @@ function update(dt) {
   }
 }
 
+/* adaptive quality: if frames run slow for a couple of seconds, render at a lower resolution */
+let perfWindow = 0, perfFrames = 0, pixelRatio = renderer.getPixelRatio();
+function adapt(dt) {
+  perfWindow += dt; perfFrames++;
+  if (perfWindow < 2) return;
+  const fps = perfFrames / perfWindow;
+  perfWindow = 0; perfFrames = 0;
+  if (fps < 45 && pixelRatio > 0.75) {
+    pixelRatio = Math.max(0.75, pixelRatio - 0.25);
+    renderer.setPixelRatio(pixelRatio);
+    resize();
+  }
+}
+
 function frame(now) {
   const dt = Math.min(0.05, (now - last) / 1000);
   last = now;
+  if (state.mode === 'run') adapt((now - (frame.prev || now)) / 1000);
+  frame.prev = now;
   if (state.mode !== 'paused') update(dt);
   renderer.render(scene, camera);
   requestAnimationFrame(frame);
