@@ -31,9 +31,11 @@
     seed();
   }
 
+  var lowPower = (navigator.hardwareConcurrency || 8) <= 4 || window.matchMedia('(pointer: coarse)').matches;
+
   function count() {
     var n = Math.round((W * H) / 14000);
-    return Math.max(34, Math.min(n, 150));
+    return Math.max(30, Math.min(n, lowPower ? 70 : 150));
   }
 
   function seed() {
@@ -173,5 +175,14 @@
   }, { passive: true });
 
   resize();
-  play();
+
+  /* start once the page has settled so the canvas never competes with first paint */
+  function boot() {
+    var go = function () { running = !document.hidden; play(); };
+    if ('requestIdleCallback' in window) requestIdleCallback(go, { timeout: 1200 });
+    else setTimeout(go, 300);
+  }
+  running = false;
+  if (document.readyState === 'complete') boot();
+  else window.addEventListener('load', boot, { once: true });
 })();

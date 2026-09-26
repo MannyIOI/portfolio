@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Pipeline Runner — Amanuel Teferi</title>
 <meta name="description" content="A small 3D game by Amanuel Teferi: steer a data packet down the pipeline, dodge bugs and firewalls, collect records." />
 <meta name="theme-color" content="#08080c" />
@@ -16,8 +16,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,800&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;700&display=swap" />
-<link rel="modulepreload" href="assets/vendor/three.module.min.js" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,800&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;700&display=swap" media="print" onload="this.media='all'" />
 
 <style>
   :root {
@@ -133,11 +132,12 @@
 </head>
 <body>
 
+<main>
 <canvas id="stage" aria-label="Pipeline Runner game" role="img"></canvas>
 <div class="flash" id="flash" aria-hidden="true"></div>
 
 <header class="top">
-  <a class="back" href="./"><b aria-hidden="true">←</b> <span>Back to portfolio</span></a>
+  <a class="back" href="./" aria-label="Back to portfolio"><b aria-hidden="true">←</b> <span>Back to portfolio</span></a>
   <div class="hud" aria-live="off">
     <div class="hud__cell"><small>SCORE</small><b id="score">0</b></div>
     <div class="hud__cell"><small>BEST</small><b id="best">0</b></div>
@@ -188,6 +188,8 @@
     </div>
   </div>
 </div>
+
+</main>
 
 <div class="touch" aria-hidden="true">
   <button type="button" data-act="left" tabindex="-1">←</button>
