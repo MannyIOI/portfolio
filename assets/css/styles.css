@@ -534,6 +534,11 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 800; line-height: 0.
 .contact__big {
   font-size: clamp(3rem, 12vw, 11rem); text-transform: uppercase;
   letter-spacing: -0.05em; margin-bottom: clamp(2rem, 5vw, 4rem);
+  color: var(--bone);
+}
+/* clip the gradient on the animated inner spans: clipping on the parent
+   leaves transformed children transparent in Chromium */
+.contact__big .char-line > span, .contact__big:not(:has(.char-line)) {
   background: linear-gradient(130deg, var(--bone) 35%, var(--acid) 75%, var(--cyan));
   -webkit-background-clip: text; background-clip: text; color: transparent;
 }
