@@ -383,6 +383,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 800; line-height: 0.
 }
 .about__body { max-width: 62ch; color: #bdb9b1; }
 .about__body b { color: var(--acid); font-weight: 500; }
+.about__body + .about__body { margin-top: 1rem; }
 .about__cards { display: flex; flex-direction: column; gap: 1rem; }
 .card {
   position: relative; overflow: hidden; padding: 1.6rem;
