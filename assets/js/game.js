@@ -257,12 +257,51 @@ function fireBurst(pos, color, strength = 1) {
   burstLife = 1;
 }
 
+/* ── sound: tiny WebAudio synth, no files ─────────────── */
+const sound = (() => {
+  let ctx = null, muted = false;
+  try { muted = localStorage.getItem('pipeline-runner-muted') === '1'; } catch (e) {}
+  function ensure() {
+    if (!ctx) { try { ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return null; } }
+    if (ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  }
+  function tone(freq, dur, type = 'sine', vol = 0.08, slide = 0) {
+    if (muted) return;
+    const a = ensure(); if (!a) return;
+    const t = a.currentTime, o = a.createOscillator(), g = a.createGain();
+    o.type = type;
+    o.frequency.setValueAtTime(freq, t);
+    if (slide) o.frequency.exponentialRampToValueAtTime(Math.max(40, freq + slide), t + dur);
+    g.gain.setValueAtTime(vol, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g).connect(a.destination);
+    o.start(t); o.stop(t + dur + 0.02);
+  }
+  return {
+    unlock: ensure,
+    get muted() { return muted; },
+    toggle() {
+      muted = !muted;
+      try { localStorage.setItem('pipeline-runner-muted', muted ? '1' : '0'); } catch (e) {}
+      return muted;
+    },
+    pickup(combo) { tone(660 + combo * 90, 0.12, 'triangle', 0.07); },
+    jump() { tone(300, 0.16, 'sine', 0.05, 260); },
+    lane() { tone(220, 0.05, 'square', 0.015); },
+    level() { tone(523, 0.12, 'triangle', 0.06); setTimeout(() => tone(784, 0.2, 'triangle', 0.06), 110); },
+    crash() { tone(180, 0.5, 'sawtooth', 0.09, -140); },
+  };
+})();
+const buzz = (ms) => { try { navigator.vibrate?.(ms); } catch (e) {} };
+
 /* ── game state ────────────────────────────────────────── */
 const ui = {
   score: $('#score'), best: $('#best'),
   start: $('#startScreen'), pause: $('#pauseScreen'), over: $('#overScreen'),
   finalScore: $('#finalScore'), finalBest: $('#finalBest'), newBest: $('#newBest'),
   quip: $('#quip'), kicker: $('#overKicker'), flash: $('#flash'),
+  combo: $('#combo'), toast: $('#toast'), mute: $('#muteBtn'), share: $('#shareBtn'),
 };
 
 let best = 0;
@@ -274,16 +313,19 @@ const state = {
   lane: 1, x: 0, y: BASE_Y, vy: 0,
   speed: START_SPEED, distance: 0, records: 0,
   nextRowAt: 40, time: 0, shake: 0, tilt: 0,
+  combo: 1, comboTimer: 0, level: 1, bonus: 0,
 };
 
-function score() { return Math.floor(state.distance / 2) + state.records * RECORD_POINTS; }
+function score() { return Math.floor(state.distance / 2) + state.bonus; }
 
 function reset() {
   while (live.length) recycle(live.length - 1);
   Object.assign(state, {
     lane: 1, x: 0, y: BASE_Y, vy: 0, speed: START_SPEED, distance: 0, records: 0,
     nextRowAt: 40, time: 0, shake: 0, tilt: 0,
+    combo: 1, comboTimer: 0, level: 1, bonus: 0,
   });
+  ui.combo.hidden = true;
   // prefill the track so the first seconds aren't empty
   for (let z = -40; z > SPAWN_Z; z -= 18) spawnRow(z, 0);
   player.visible = true;
@@ -292,7 +334,17 @@ function reset() {
 
 function show(el, on) { el.hidden = !on; }
 
+let toastTimer;
+function toast(title, sub) {
+  ui.toast.innerHTML = `${title}<small>${sub}</small>`;
+  ui.toast.classList.add('is-on');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => ui.toast.classList.remove('is-on'), 1400);
+}
+const LEVELS = ['', '', 'Throughput up', 'Peak traffic', 'Black Friday', 'Viral spike', 'Full firehose'];
+
 function start() {
+  sound.unlock();
   reset();
   state.mode = 'run';
   show(ui.start, false); show(ui.over, false); show(ui.pause, false);
@@ -309,6 +361,8 @@ function gameOver() {
   fireBurst(player.position, COLORS.coral, 1.3);
   player.visible = false;
   state.shake = 0.6;
+  sound.crash();
+  buzz([60, 40, 90]);
   ui.flash.classList.add('is-on');
   requestAnimationFrame(() => ui.flash.classList.remove('is-on'));
   const s = score();
@@ -330,11 +384,11 @@ function gameOver() {
 function move(dir) {
   if (state.mode !== 'run') return;
   const next = Math.max(0, Math.min(2, state.lane + dir));
-  if (next !== state.lane) { state.lane = next; state.tilt = -dir * 0.5; }
+  if (next !== state.lane) { state.lane = next; state.tilt = -dir * 0.5; sound.lane(); }
 }
 function jump() {
   if (state.mode !== 'run') return;
-  if (state.y <= BASE_Y + 0.01) state.vy = JUMP_V;
+  if (state.y <= BASE_Y + 0.01) { state.vy = JUMP_V; sound.jump(); }
 }
 function drop() {
   if (state.mode === 'run' && state.y > BASE_Y + 0.05) state.vy = -JUMP_V * 1.8;
@@ -349,6 +403,7 @@ window.addEventListener('keydown', (e) => {
     }
     return;
   }
+  if (k === 'm' || k === 'M') { sound.toggle(); syncMute(); return; }
   if (k === 'p' || k === 'P' || k === 'Escape') { pause(state.mode === 'run'); return; }
   if (state.mode !== 'run' || e.repeat) return;
   if (k === 'ArrowLeft' || k === 'a' || k === 'A') move(-1);
@@ -387,6 +442,27 @@ document.querySelectorAll('.touch [data-act]').forEach((b) => {
 $('#startBtn').addEventListener('click', start);
 $('#againBtn').addEventListener('click', start);
 $('#resumeBtn').addEventListener('click', () => pause(false));
+
+function syncMute() {
+  ui.mute.setAttribute('aria-pressed', String(sound.muted));
+  ui.mute.setAttribute('aria-label', sound.muted ? 'Unmute sound' : 'Mute sound');
+}
+ui.mute.addEventListener('click', (e) => { sound.toggle(); syncMute(); e.currentTarget.blur(); });
+syncMute();
+
+ui.share.addEventListener('click', async () => {
+  const url = new URL('play.html', location.href).href;
+  const text = `I scored ${ui.finalScore.textContent} on Pipeline Runner, a 3D game on Amanuel Teferi's portfolio. Beat it:`;
+  try {
+    if (navigator.share) { await navigator.share({ title: 'Pipeline Runner', text, url }); return; }
+    await navigator.clipboard.writeText(`${text} ${url}`);
+    ui.share.textContent = 'Copied to clipboard';
+  } catch (e) {
+    if (e && e.name === 'AbortError') return;
+    ui.share.textContent = 'Copy failed';
+  }
+  setTimeout(() => { ui.share.textContent = 'Share score'; }, 1800);
+});
 document.addEventListener('visibilitychange', () => { if (document.hidden) pause(true); });
 window.addEventListener('blur', () => pause(true));
 
@@ -431,6 +507,17 @@ function update(dt) {
       state.nextRowAt = THREE.MathUtils.lerp(26, 15, difficulty) + Math.random() * 6;
     }
     ui.score.textContent = score();
+
+    if (state.comboTimer > 0) {
+      state.comboTimer -= dt;
+      if (state.comboTimer <= 0) { state.combo = 1; ui.combo.hidden = true; }
+    }
+    const level = 1 + Math.floor(state.distance / 400);
+    if (level > state.level) {
+      state.level = level;
+      toast(`Level ${level}`, LEVELS[Math.min(level, LEVELS.length - 1)] || 'Keep going');
+      sound.level();
+    }
   }
 
   // world scroll
@@ -462,8 +549,17 @@ function update(dt) {
         if (t === 'record') {
           if (Math.abs(m.position.y - state.y) < 0.9) {
             state.records++;
+            state.combo = state.comboTimer > 0 ? Math.min(5, state.combo + 1) : 1;
+            state.comboTimer = 1.6;
+            state.bonus += RECORD_POINTS * state.combo;
             m.visible = false;
             fireBurst(m.position, COLORS.acid, 0.4);
+            sound.pickup(state.combo);
+            if (state.combo > 1) {
+              ui.combo.textContent = `×${state.combo}`;
+              ui.combo.hidden = false;
+              ui.combo.classList.remove('pop'); void ui.combo.offsetWidth; ui.combo.classList.add('pop');
+            }
           }
         } else if (bottom < s.h - 0.05) {
           gameOver();
@@ -527,4 +623,4 @@ for (let z = -30; z > SPAWN_Z; z -= 20) spawnRow(z, 0);
 requestAnimationFrame(frame);
 
 // expose a tiny hook for automated smoke tests
-window.__pipelineRunner = { state, start, score };
+window.__pipelineRunner = { state, start, score, spawn };

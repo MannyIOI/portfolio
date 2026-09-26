@@ -60,6 +60,27 @@
   .hud__cell small { display: block; font-size: 0.6rem; letter-spacing: 0.14em; color: var(--bone-dim); }
   .hud__cell b { font-size: 1.15rem; font-weight: 500; font-variant-numeric: tabular-nums; }
   #score { color: var(--acid); }
+  .hud__cell { position: relative; }
+  .combo {
+    position: absolute; left: -0.5rem; bottom: -0.55rem; padding: 0.1rem 0.45rem; border-radius: 6px;
+    background: var(--acid); color: var(--ink); font-style: normal; font-size: 0.7rem; font-weight: 500;
+  }
+  .combo.pop { animation: pop 0.3s var(--ease); }
+  @keyframes pop { 50% { transform: scale(1.35); } }
+  .hud__mute {
+    align-self: center; width: 2.6rem; height: 2.6rem; border-radius: 50%; border: 1px solid var(--line);
+    background: rgba(8, 8, 12, 0.6); color: var(--bone); font-size: 1rem; cursor: pointer; backdrop-filter: blur(8px);
+  }
+  .hud__mute[aria-pressed="true"] { color: var(--bone-dim); text-decoration: line-through; }
+  .hud__mute:hover, .hud__mute:focus-visible { border-color: var(--acid); }
+  .toast {
+    position: fixed; left: 50%; top: 22%; z-index: 3; transform: translate(-50%, 10px); opacity: 0; pointer-events: none;
+    font-family: var(--font-display); font-weight: 800; font-size: clamp(1.6rem, 6vw, 3rem); letter-spacing: -0.03em;
+    text-transform: uppercase; color: var(--acid); text-shadow: 0 0 30px rgba(215, 255, 62, 0.45); white-space: nowrap;
+    transition: opacity 0.3s ease, transform 0.5s var(--ease);
+  }
+  .toast.is-on { opacity: 1; transform: translate(-50%, 0); }
+  .toast small { display: block; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 400; letter-spacing: 0.18em; color: var(--bone); text-align: center; }
 
   .overlay {
     position: fixed; inset: 0; z-index: 4; display: grid; place-items: center; padding: 1.25rem;
@@ -136,11 +157,13 @@
 <main>
 <canvas id="stage" aria-label="Pipeline Runner game" role="img"></canvas>
 <div class="flash" id="flash" aria-hidden="true"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <header class="top">
   <a class="back" href="./" aria-label="Back to portfolio"><b aria-hidden="true">←</b> <span>Back to portfolio</span></a>
   <div class="hud" aria-live="off">
-    <div class="hud__cell"><small>SCORE</small><b id="score">0</b></div>
+    <button class="hud__mute" id="muteBtn" type="button" aria-pressed="false" aria-label="Mute sound"><span aria-hidden="true">♪</span></button>
+    <div class="hud__cell"><small>SCORE</small><b id="score">0</b><i class="combo" id="combo" hidden>×2</i></div>
     <div class="hud__cell"><small>BEST</small><b id="best">0</b></div>
   </div>
 </header>
@@ -151,14 +174,14 @@
     <h1>Pipeline <span>Runner</span></h1>
     <p>You're a data packet. Get through the pipeline without dropping a record: dodge the bugs, jump the firewalls, collect everything that glows.</p>
     <div class="legend">
-      <span><i style="background:#d7ff3e"></i>Record +25</span>
+      <span><i style="background:#d7ff3e"></i>Record +25 · chain for ×5</span>
       <span><i style="background:#ff5a3c"></i>Bug — dodge</span>
       <span><i style="background:#6e4bff"></i>Firewall — jump</span>
     </div>
     <div class="keys">
       <span><kbd>←</kbd><kbd>→</kbd>switch lane</span>
       <span><kbd>Space</kbd>jump</span>
-      <span><kbd>P</kbd>pause</span>
+      <span><kbd>P</kbd>pause · <kbd>M</kbd>mute</span>
     </div>
     <p class="touch-hint">Swipe or use the buttons to switch lanes and jump.</p>
     <button class="btn" id="startBtn" type="button">Start run <span aria-hidden="true">→</span></button>
@@ -185,6 +208,7 @@
     <p class="quip" id="quip"></p>
     <div class="row">
       <button class="btn" id="againBtn" type="button">Run it again <span aria-hidden="true">↻</span></button>
+      <button class="btn btn--ghost" id="shareBtn" type="button">Share score</button>
       <a class="btn btn--ghost" href="./#contact">Hire the dev</a>
     </div>
   </div>
