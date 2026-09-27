@@ -112,3 +112,12 @@ $$;
 -- submit_score: same validation and limits as above; after the insert it now returns
 --   rank  = 1 + number of other names whose best beats this name's best
 --   total = number of distinct names
+
+-- leaderboard_name_key_ignores_symbols: players are matched on name_key(name) = lowercase letters
+-- and digits only, so "Happy", "happy!" and "Happy ❤️" are one player. A returning player's run is
+-- stored under the name already on the board, so names edited by hand (e.g. adding an emoji) stick.
+create or replace function public.name_key(n text) returns text
+language sql immutable set search_path = public as $$
+  select lower(regexp_replace(coalesce(n, ''), '[^[:alnum:]]', '', 'g'));
+$$;
+-- get_top_scores and submit_score group and rank by public.name_key(name).

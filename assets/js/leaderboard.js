@@ -9,6 +9,9 @@ const API = 'https://ehvhpcyibqeuxymetcsi.supabase.co/rest/v1/rpc/';
 // publishable key: safe to ship in the browser, it only reaches the two functions above
 const KEY = 'sb_publishable_BpMFVNjNWIbFA1U4wAycXw_TIiRnegt';
 
+/** Same rule as the database's name_key(): letters and digits only, case-insensitive. */
+export const nameKey = (n) => String(n || '').toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
+
 export const BOTS = [
   { name: 'The Firewall', score: 1800, bot: true },
   { name: 'Latency Larry', score: 1100, bot: true },
@@ -91,7 +94,7 @@ export function placeRun(board, score, limit = 8) {
 /** The board after saving: top `limit` rows, and the saved name's row after a gap if it's further down. */
 export function placeSaved(board, name, limit = 8) {
   const rows = board.rows.map((r, i) => ({ ...r, rank: i + 1 }));
-  const idx = rows.findIndex((r) => !r.bot && r.name.toLowerCase() === name.toLowerCase());
+  const idx = rows.findIndex((r) => !r.bot && nameKey(r.name) === nameKey(name));
   if (idx < 0 || idx < limit) return rows.slice(0, limit);
   return [...rows.slice(0, limit - 1), { gap: true }, rows[idx]];
 }
@@ -105,7 +108,7 @@ export function renderBoard(ol, rows, highlight) {
     if (r.bot) li.className = 'is-bot';
     if (r.pending) li.classList.add('is-you', 'is-pending');
     // one row per name (their best run), so match on the name, not this run's score
-    if (highlight && !r.bot && !r.pending && r.name.toLowerCase() === highlight.name.toLowerCase()) li.classList.add('is-you');
+    if (highlight && !r.bot && !r.pending && nameKey(r.name) === nameKey(highlight.name)) li.classList.add('is-you');
     const rank = document.createElement('span'); rank.className = 'lb__rank';
     rank.textContent = typeof r.rank === 'string' ? r.rank : String(r.rank || i + 1).padStart(2, '0');
     const name = document.createElement('span'); name.className = 'lb__name'; name.textContent = r.name;
